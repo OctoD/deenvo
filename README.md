@@ -4,8 +4,9 @@ Data structures and data types for Deno.
 
 - [deenvo 🦕](#deenvo-)
   - [install](#install)
-  - [testing](#testing)
   - [docs](#docs)
+  - [testing](#testing)
+  - [contributing](#contributing)
 
 ## install
 
@@ -19,20 +20,6 @@ export interface IMyObject {
 export default function myfunction(maybeobject?: IMyObject): string {
   return option(maybevalue).map(a => a.name).unwrapOr('invalid name');
 }
-```
-
-## testing
-
-Before testing, ensure to cache the assert modules
-
-```bash
-deno cache ./mod.test.ts
-```
-
-Then run the test suite
-
-```bash
-deno test ./mod.test.ts
 ```
 
 ## docs
@@ -57,3 +44,21 @@ Interfaces
 - [IInsertable](IInsertable.ts.md)
 - [IMappable](IMappable.ts.md)
 - [IUnwrappable](IUnwrappable.ts.md)
+
+## testing
+
+Before testing, ensure to cache the assert modules
+
+```bash
+deno cache ./mod.test.ts
+```
+
+Then run the test suite
+
+```bash
+deno test ./mod.test.ts
+```
+
+## contributing
+
+Every contribution is welcome, please feel free to open pull request or fill issues.
