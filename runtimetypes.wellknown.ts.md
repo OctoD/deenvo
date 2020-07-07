@@ -17,7 +17,7 @@
       - [float](#float)
       - [floatarray](#floatarray)
       - [fn](#fn)
-      - [impl](#impl)
+      - [struct](#struct)
       - [int](#int)
       - [intarray](#intarray)
       - [nullable](#nullable)
@@ -97,7 +97,7 @@ Accepts only arrays of [float](#float)
 
 Accept any function
 
-#### impl
+#### struct
 
 Derived from [plainobject](#plainobject)
 
@@ -106,14 +106,14 @@ Is used to determine a complex data type.
 ```ts
 import { types } from 'https://deno.land/x/deenvo';
 
-const address = types.impl({
+const address = types.struct({
   buildingnumber: types.string,
   city: types.string,
   street: types.string,
   zipcode: types.uint,
 });
 
-const mycomplextype = types.impl({
+const mycomplextype = types.struct({
   age: types.uint,
   name: types.string,
   surname: types.string,

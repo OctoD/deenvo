@@ -155,9 +155,9 @@ createtest(types.uintarray, [
   ["new Date()"],
 ]);
 
-Deno.test("impl type (the complex one)", () => {
+Deno.test("struct type (the complex one)", () => {
   assert(
-    types.impl({
+    types.struct({
       hello: types.string,
       world: types.int,
       foo: {

@@ -135,18 +135,18 @@ export const unaryfn = fn.derive(
 
 //#region impl
 
-export interface IImpl {
-  [index: string]: ReturnType<any> & IImpl;
+export interface IStruct {
+  [index: string]: ReturnType<any> & IStruct;
 }
 
-export type ImplOf<T extends IImpl> = {
-  [key in keyof T]: T[key] extends RuntimeType<infer U> ? U : ImplOf<T[key]>;
+export type StructOf<T extends IStruct> = {
+  [key in keyof T]: T[key] extends RuntimeType<infer U> ? U : StructOf<T[key]>;
 };
 
-export type ImplFn<T extends IImpl> = RuntimeType<ImplOf<T>>;
+export type StructFn<T extends IStruct> = RuntimeType<StructOf<T>>;
 
-export const impl = <T extends IImpl>(arg: T): ImplFn<T> => {
-  const validate = (currentschema: IImpl, currentvalue: any): boolean => {
+export const struct = <T extends IStruct>(arg: T): StructFn<T> => {
+  const validate = (currentschema: IStruct, currentvalue: any): boolean => {
     const keys = Object.keys(currentschema);
 
     return keys.every((key) => {
@@ -160,7 +160,7 @@ export const impl = <T extends IImpl>(arg: T): ImplFn<T> => {
   };
 
   return plainobject.derive(
-    "impl",
+    "struct",
     (value) => validate(arg, value),
   );
 };
