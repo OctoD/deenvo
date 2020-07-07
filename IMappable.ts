@@ -18,13 +18,13 @@ export interface IComputedMappable<T> {
    * @template U
    * @param {IComputedMappable<U>} def
    * @param {MappableFn<T, U>} fn
-   * @returns {(IComputedMappable<T | U>)}
+   * @returns {(IComputedMappable<U>)}
    * @memberof IComputedMappable
    */
   mapOr<U>(
     def: IComputedMappable<U>,
     fn: MappableFn<T, U>,
-  ): IComputedMappable<T | U>;
+  ): IComputedMappable<U>;
 }
 
 export interface ITernaryComputedMappable<T> {
@@ -34,13 +34,13 @@ export interface ITernaryComputedMappable<T> {
    * @template U
    * @param {MappableFn<T, U>} defFn
    * @param {MappableFn<T, U>} fn
-   * @returns {(ITernaryComputedMappable<T | U>)}
+   * @returns {(ITernaryComputedMappable<U>)}
    * @memberof ITernaryComputedMappable
    */
   mapOrElse<U>(
     defFn: MappableFn<T, U>,
     fn: MappableFn<T, U>,
-  ): ITernaryComputedMappable<T | U>;
+  ): ITernaryComputedMappable<U>;
 }
 
 export default interface IMappable<T>

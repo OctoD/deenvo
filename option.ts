@@ -151,10 +151,10 @@ export class OptionLike<T>
    * @template U
    * @param {Option<U>} def
    * @param {MappableFn<T, U>} fn
-   * @returns {(Option<T | U>)}
+   * @returns {(Option<U>)}
    * @memberof OptionLike
    */
-  public mapOr<U>(def: Option<U>, fn: MappableFn<T, U>): Option<T | U> {
+  public mapOr<U>(def: Option<U>, fn: MappableFn<T, U>): Option<U> {
     return this.isSome() ? option(fn(this._value)) : def;
   }
 
@@ -169,13 +169,13 @@ export class OptionLike<T>
    * @template U
    * @param {Option<U>} def
    * @param {MappableFn<T, U>} fn
-   * @returns {(Option<T | U>)}
+   * @returns {(Option<U>)}
    * @memberof OptionLike
    */
   public mapOrElse<U>(
     defFn: MappableFn<T, U>,
     fn: MappableFn<T, U>,
-  ): Option<T | U> {
+  ): Option<U> {
     return this.isSome() ? option(fn(this._value)) : option(defFn(this._value));
   }
 

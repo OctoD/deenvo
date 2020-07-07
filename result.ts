@@ -124,7 +124,7 @@ export class ResultLike<T, E extends Error = Error>
    * @returns {(Result<T | U>)}
    * @memberof ResultLike
    */
-  public mapOr<U>(def: Result<U>, fn: MappableFn<T, U>): Result<T | U> {
+  public mapOr<U>(def: Result<U>, fn: MappableFn<T, U>): Result<U> {
     return this.isOk() ? result(fn(this._value)) : def;
   }
 
@@ -139,7 +139,7 @@ export class ResultLike<T, E extends Error = Error>
   public mapOrElse<U>(
     defFn: MappableFn<T, U>,
     fn: MappableFn<T, U>,
-  ): Result<T | U> {
+  ): Result<U> {
     return this.isOk() ? result(fn(this._value)) : result(defFn(this._value));
   }
 
