@@ -1,3 +1,4 @@
+import "./tests/linked-list.test.ts";
 import "./tests/list.test.ts";
 import "./tests/maybe.test.ts";
 import "./tests/option.test.ts";

@@ -1,5 +1,10 @@
 export { default as IAssertable } from "./IAssertable.ts";
 export {
+  default as IEnumerable,
+  IEnumerableIndexable,
+  IEnumerableQueryable,
+} from "./IEnumerable.ts";
+export {
   default as IConditional,
   IComputedComparisonConditional,
   IImmediateComparisonConditional,
@@ -18,6 +23,13 @@ export { default as IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
 export * as common from "./common.ts";
 export * as types from "./runtimetypes.wellknown.ts";
 export { List, list, ListLike } from "./list.ts";
+export {
+  LinkedList,
+  LinkedListLike,
+  Node,
+  linkedlist,
+  node,
+} from "./linked-list.ts";
 export {
   Just,
   Maybe,
