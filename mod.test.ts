@@ -1,3 +1,4 @@
+import "./tests/doubly-linked-list.test.ts";
 import "./tests/linked-list.test.ts";
 import "./tests/list.test.ts";
 import "./tests/maybe.test.ts";
