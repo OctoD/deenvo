@@ -3,18 +3,18 @@ import { FnBase, ArgsOf } from './common.ts';
 import ICallable, { CallableMethodReturnValue } from './ICallable.ts';
 import { safe, safeAsync } from './safe.ts';
 
-export class StackLike<T extends FnBase> extends DoublyLinkedListLike<T> implements ICallable<T> {
+export class QueueLike<T extends FnBase> extends DoublyLinkedListLike<T> implements ICallable<T> {
   /**
    *
    *
    * @param {...ArgsOf<T>} args
    * @returns {CallableMethodReturnValue<T>}
-   * @memberof StackLike
+   * @memberof QueueLike
    */
   public call(... args: ArgsOf<T>): CallableMethodReturnValue<T> {
     const results: CallableMethodReturnValue<T> = [];
 
-    this.forEach(node => results.push(safe(node.value, ... args)), true);
+    this.forEach(node => results.push(safe(node.value, ... args)));
 
     return results;
   }
@@ -24,21 +24,21 @@ export class StackLike<T extends FnBase> extends DoublyLinkedListLike<T> impleme
    *
    * @param {...ArgsOf<T>} args
    * @returns {Promise<CallableMethodReturnValue<T>>}
-   * @memberof StackLike
+   * @memberof QueueLike
    */
   public async callasync(... args: ArgsOf<T>): Promise<CallableMethodReturnValue<T>> {
     const results: CallableMethodReturnValue<T> = [];
 
-    await this.forEach(async node => results.push((await safeAsync(node.value, ... args) as ReturnType<T>)), true);
+    await this.forEach(async node => results.push((await safeAsync(node.value, ... args) as ReturnType<T>)));
 
     return results;
   }
 }
 
-export type Stack<T extends FnBase> = StackLike<T>;
-export type Stackable<T extends FnBase> = DoublyNode<T>;
+export type Queue<T extends FnBase> = QueueLike<T>;
+export type Queueable<T extends FnBase> = DoublyNode<T>;
 
-export function stackable<T extends FnBase>(fn: T): Stackable<T> {
+export function queueable<T extends FnBase>(fn: T): Queueable<T> {
   return doublynode(fn);
 }
 
@@ -47,13 +47,13 @@ export function stackable<T extends FnBase>(fn: T): Stackable<T> {
  *
  * @export
  * @template T
- * @returns {Stack<T>}
+ * @returns {Queue<T>}
  */
-export function stack<T extends FnBase>(... args: T[]): Stack<T> {
-  const mystack = new StackLike<T>();
+export function queue<T extends FnBase>(... args: T[]): Queue<T> {
+  const mystack = new QueueLike<T>();
 
   if (args.length > 0) {
-    args.forEach(a => mystack.insert(stackable(a)));
+    args.forEach(a => mystack.insert(queueable(a)));
   }
 
   return mystack;
