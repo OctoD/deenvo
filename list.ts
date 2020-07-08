@@ -146,7 +146,7 @@ export class ListLike<T>
    * @returns {(List<T | U>)}
    * @memberof ListLike
    */
-  public mapOr<U>(def: List<U>, fn: MappableFn<T, U>): List<T | U> {
+  public mapOr<U>(def: List<U>, fn: MappableFn<T, U>): List<U> {
     return this.isFilled() ? new ListLike(this._args.map(fn)) : def;
   }
 
