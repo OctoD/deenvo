@@ -26,20 +26,26 @@ export default function myfunction(maybeobject?: IMyObject): string {
 
 Types
 
+- [doubly linked list](doubly-linked-list.ts.md)
+- [linked-list](linked-list.ts.md)
 - [list](list.ts.md)
 - [maybe](maybe.ts.md)
 - [option](option.ts.md)
 - [pushsub](pushsub.ts.md)
+- [queue](queue.ts.md)
 - [result](result.ts.md)
 - [runtimetype](runtimetype.ts.md)
   - [wellknowntypes](runtimetypes.wellknown.ts.md)
 - [safe](safe.ts.md)
+- [stack](stack.ts.md)
 - [tuple](tuple.ts.md)
 
 Interfaces
 
 - [IAssertable](IAssertable.ts.md)
+- [ICallable](ICallable.ts.md)
 - [IConditional](IConditional.ts.md)
+- [IEnumerable](IEnumerable.ts.md)
 - [IFilterable](IFilterable.ts.md)
 - [IInsertable](IInsertable.ts.md)
 - [IMappable](IMappable.ts.md)

@@ -1,9 +1,14 @@
-import { DoublyLinkedListLike, doublynode, DoublyNode } from './doubly-linked-list.ts';
-import { FnBase, ArgsOf } from './common.ts';
-import ICallable, { CallableMethodReturnValue } from './ICallable.ts';
-import { safe, safeAsync } from './safe.ts';
+import {
+  DoublyLinkedListLike,
+  doublynode,
+  DoublyNode,
+} from "./doubly-linked-list.ts";
+import { FnBase, ArgsOf } from "./common.ts";
+import ICallable, { CallableMethodReturnValue } from "./ICallable.ts";
+import { safe, safeAsync } from "./safe.ts";
 
-export class StackLike<T extends FnBase> extends DoublyLinkedListLike<T> implements ICallable<T> {
+export class StackLike<T extends FnBase> extends DoublyLinkedListLike<T>
+  implements ICallable<T> {
   /**
    *
    *
@@ -11,10 +16,10 @@ export class StackLike<T extends FnBase> extends DoublyLinkedListLike<T> impleme
    * @returns {CallableMethodReturnValue<T>}
    * @memberof StackLike
    */
-  public call(... args: ArgsOf<T>): CallableMethodReturnValue<T> {
+  public call(...args: ArgsOf<T>): CallableMethodReturnValue<T> {
     const results: CallableMethodReturnValue<T> = [];
 
-    this.forEach(node => results.push(safe(node.value, ... args)), true);
+    this.forEach((node) => results.push(safe(node.value, ...args)), true);
 
     return results;
   }
@@ -26,10 +31,16 @@ export class StackLike<T extends FnBase> extends DoublyLinkedListLike<T> impleme
    * @returns {Promise<CallableMethodReturnValue<T>>}
    * @memberof StackLike
    */
-  public async callasync(... args: ArgsOf<T>): Promise<CallableMethodReturnValue<T>> {
+  public async callasync(
+    ...args: ArgsOf<T>
+  ): Promise<CallableMethodReturnValue<T>> {
     const results: CallableMethodReturnValue<T> = [];
 
-    await this.forEach(async node => results.push((await safeAsync(node.value, ... args) as ReturnType<T>)), true);
+    await this.forEach(
+      async (node) =>
+        results.push((await safeAsync(node.value, ...args) as ReturnType<T>)),
+      true,
+    );
 
     return results;
   }
@@ -38,7 +49,7 @@ export class StackLike<T extends FnBase> extends DoublyLinkedListLike<T> impleme
 export type Stack<T extends FnBase> = StackLike<T>;
 export type Stackable<T extends FnBase> = DoublyNode<T>;
 
-export function stackable<T extends FnBase>(fn: T): Stackable<T> {
+export function stackable<T extends FnBase>(fn: T): Stackable<T> {
   return doublynode(fn);
 }
 
@@ -49,11 +60,11 @@ export function stackable<T extends FnBase>(fn: T): Stackable<T> {
  * @template T
  * @returns {Stack<T>}
  */
-export function stack<T extends FnBase>(... args: T[]): Stack<T> {
+export function stack<T extends FnBase>(...args: T[]): Stack<T> {
   const mystack = new StackLike<T>();
 
   if (args.length > 0) {
-    args.forEach(a => mystack.insert(stackable(a)));
+    args.forEach((a) => mystack.insert(stackable(a)));
   }
 
   return mystack;

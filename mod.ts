@@ -50,7 +50,7 @@ export {
   some,
 } from "./option.ts";
 export { PushSub, UnsubscriberFn, pushsub } from "./pushsub.ts";
-export { queue, queueable, Queue, QueueLike, Queueable } from './queue.ts';
+export { queue, queueable, Queue, QueueLike, Queueable } from "./queue.ts";
 export { Err, Ok, Result, ResultLike, err, ok, result } from "./result.ts";
 export {
   DerivedTypeCheckerFn,
@@ -61,5 +61,5 @@ export {
   runtimetype,
 } from "./runtimetype.ts";
 export { safe, safeAsync } from "./safe.ts";
-export { stack, stackable, Stack, StackLike, Stackable } from './stack.ts'
+export { stack, stackable, Stack, StackLike, Stackable } from "./stack.ts";
 export { Tuple, TupleLike, tuple } from "./tuple.ts";
