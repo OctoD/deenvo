@@ -3,7 +3,7 @@ import { MappableFn } from './IMappable.ts';
 import { LinkedListLike, Node, node } from './linked-list.ts';
 import { Result } from './result.ts';
 
-export class DoublyLinkedList<T> extends LinkedListLike<T> implements IEnumerableIterable<T, DoublyNode<T>> {
+export class DoublyLinkedListLike<T> extends LinkedListLike<T> implements IEnumerableIterable<T, DoublyNode<T>> {
   protected _head?: DoublyNode<T>;
   protected _tail?: DoublyNode<T>;
 
@@ -24,7 +24,7 @@ export class DoublyLinkedList<T> extends LinkedListLike<T> implements IEnumerabl
     }
   }
 
-  public insert(node: DoublyNode<T>): DoublyLinkedList<T> {
+  public insert(node: DoublyNode<T>): DoublyLinkedListLike<T> {
     const tailreference = this._tail;
     
     super.insert(node);
@@ -36,7 +36,7 @@ export class DoublyLinkedList<T> extends LinkedListLike<T> implements IEnumerabl
     return this;
   }
 
-  public map<U>(fn: MappableFn<T, U>): DoublyLinkedList<T | U> {
+  public map<U>(fn: MappableFn<T, U>): DoublyLinkedListLike<T | U> {
     if (this.isempty()) {
       return this;
     }
@@ -55,11 +55,12 @@ export class DoublyLinkedList<T> extends LinkedListLike<T> implements IEnumerabl
 }
 
 export type DoublyNode<T> = Node<T> & { prev?: DoublyNode<T> };
+export type DoublyLinkedList<T> = DoublyLinkedListLike<T>;
 
 export function doublynode<T>(value: T): DoublyNode<T> {
   return node(value);
 }
 
-export function doublylinkedlist<T = unknown>(): DoublyLinkedList<T> {
-  return new DoublyLinkedList();
+export function doublylinkedlist<T = unknown>(): DoublyLinkedListLike<T> {
+  return new DoublyLinkedListLike();
 }
