@@ -102,10 +102,10 @@ export class MaybeLike<T>
    * @template U
    * @param {Maybe<U>} def
    * @param {MappableFn<T, U>} fn
-   * @returns {(Maybe<T | U>)}
+   * @returns {(Maybe<U>)}
    * @memberof MaybeLike
    */
-  public mapOr<U>(def: Maybe<U>, fn: MappableFn<T, U>): Maybe<T | U> {
+  public mapOr<U>(def: Maybe<U>, fn: MappableFn<T, U>): Maybe<U> {
     ensureFn(fn, "Maybe.mapOr fn argument must be a function");
     return this.isJust() ? maybe(fn(this._value)) : def;
   }
@@ -116,13 +116,13 @@ export class MaybeLike<T>
    * @template U
    * @param {MappableFn<T, U>} defFn
    * @param {MappableFn<T, U>} fn
-   * @returns {(Maybe<T | U>)}
+   * @returns {(Maybe<U>)}
    * @memberof MaybeLike
    */
   public mapOrElse<U>(
     defFn: MappableFn<T, U>,
     fn: MappableFn<T, U>,
-  ): Maybe<T | U> {
+  ): Maybe<U> {
     ensureFn(defFn, "Maybe.mapOrElse defFn argument must be a function");
     ensureFn(fn, "Maybe.mapOrElse fn argument must be a function");
     return maybe(this.isJust() ? fn(this._value) : defFn(this._value));
