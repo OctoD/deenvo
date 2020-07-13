@@ -1,3 +1,4 @@
+import { ensureFn } from './common.ts';
 import { EnumerableForEachFn, IEnumerableIterable } from "./IEnumerable.ts";
 import { MappableFn } from "./IMappable.ts";
 import { LinkedListLike, Node, node } from "./linked-list.ts";
@@ -17,6 +18,7 @@ export class DoublyLinkedListLike<T> extends LinkedListLike<T>
     reversed = false,
   ): void {
     let current = reversed ? this._tail : this._head;
+    ensureFn(fn, 'DoublyLinkedList.forEach fn argument must be a function');
 
     if (!current) {
       return;
@@ -41,6 +43,8 @@ export class DoublyLinkedListLike<T> extends LinkedListLike<T>
   }
 
   public map<U>(fn: MappableFn<T, U>): DoublyLinkedListLike<T | U> {
+    ensureFn(fn, 'DoublyLinkedList.map fn argument must be a function');
+
     if (this.isempty()) {
       return this;
     }

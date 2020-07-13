@@ -3,7 +3,7 @@ import {
   doublynode,
   DoublyNode,
 } from "./doubly-linked-list.ts";
-import { FnBase, ArgsOf } from "./common.ts";
+import { FnBase, ArgsOf, ensureFn } from "./common.ts";
 import ICallable, { CallableMethodReturnValue } from "./ICallable.ts";
 import { safe, safeAsync } from "./safe.ts";
 
@@ -62,7 +62,10 @@ export function queue<T extends FnBase>(...args: T[]): Queue<T> {
   const mystack = new QueueLike<T>();
 
   if (args.length > 0) {
-    args.forEach((a) => mystack.insert(queueable(a)));
+    args.forEach((a) => {
+      ensureFn(a, 'Queue.fn argument must be a function');
+      mystack.insert(queueable(a))
+    });
   }
 
   return mystack;

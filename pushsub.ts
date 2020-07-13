@@ -1,4 +1,4 @@
-import { ArgsOf, FnBase } from "./common.ts";
+import { ArgsOf, ensureFn, FnBase } from "./common.ts";
 
 export type UnsubscriberFn = () => boolean;
 
@@ -30,6 +30,7 @@ function createsubscriber<Fn extends FnBase>(
   subscribers: Set<Fn>,
 ): PushSub<Fn>["subscribe"] {
   return (fn) => {
+    ensureFn(fn, 'PushSub.subscribe fn argument must be a function');
     subscribers.add(fn);
     return () => subscribers.delete(fn);
   };
