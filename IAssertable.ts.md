@@ -3,7 +3,7 @@
 # IAssertable
 
 ```ts
-export default interface IAssertable<T> {
+export interface IAssertable<T> {
   /**
    * If the contained value is expected, it should not throw and returns the container `IAssertable<T>`
    *

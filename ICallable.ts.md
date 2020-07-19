@@ -5,7 +5,7 @@
 ```ts
 export type CallableMethodReturnValue<T extends FnBase> = Array<Result<ReturnType<T>>>;
 
-export default interface ICallable<T extends FnBase> {
+export interface ICallable<T extends FnBase> {
   /**
    * Calls with the given arguments `ArgsOf<T>`
    *

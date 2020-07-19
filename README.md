@@ -17,7 +17,7 @@ export interface IMyObject {
   name: string;
 }
 
-export default function myfunction(maybeobject?: IMyObject): string {
+export function myfunction(maybeobject?: IMyObject): string {
   return option(maybevalue).map(a => a.name).unwrapOr('invalid name');
 }
 ```

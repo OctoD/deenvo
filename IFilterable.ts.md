@@ -5,7 +5,7 @@
 ```ts
 export type FilterableFn<T> = (arg: T) => boolean;
 
-export default interface IFilterable<T> {
+export interface IFilterable<T> {
   /**
    * Filters the contained value `T` with a given predicate `fn`. It should return a valid container `IFilterable<T>`
    *
