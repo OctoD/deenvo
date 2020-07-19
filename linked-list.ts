@@ -1,4 +1,4 @@
-import IInsertable from "./IInsertable.ts";
+import { IInsertable } from "./IInsertable.ts";
 import { IImmediateMappable, MappableFn } from "./IMappable.ts";
 import { IEnumerableQueryable } from "./IEnumerable.ts";
 import { ok, err, Result } from "./result.ts";

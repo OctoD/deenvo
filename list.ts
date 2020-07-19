@@ -1,21 +1,15 @@
 import { ensureFn } from './common.ts';
+import { IAssertable } from './IAssertable.ts';
 import { IImmediateComparisonConditional } from "./IConditional.ts";
-import { FilterableFn } from "./IFilterable.ts";
+import { FilterableFn, IFilterable } from "./IFilterable.ts";
+import { IInsertable } from './IInsertable.ts';
 import {
   IComputedMappable,
   IImmediateMappable,
   MappableFn,
 } from "./IMappable.ts";
-import { UnwrappableFn } from "./IUnwrappable.ts";
-import {
-  IAssertable,
-  IFilterable,
-  IUnwrappable,
-  just,
-  Maybe,
-  nothing,
-  IInsertable,
-} from "./mod.ts";
+import { IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
+import { just, nothing, Maybe } from './maybe.ts';
 import { none, Option, some } from "./option.ts";
 import { err, ok, Result } from "./result.ts";
 

@@ -4,7 +4,7 @@ import {
   DoublyNode,
 } from "./doubly-linked-list.ts";
 import { FnBase, ArgsOf, ensureFn } from "./common.ts";
-import ICallable, { CallableMethodReturnValue } from "./ICallable.ts";
+import { ICallable, CallableMethodReturnValue } from "./ICallable.ts";
 import { safe, safeAsync } from "./safe.ts";
 
 export class QueueLike<T extends FnBase> extends DoublyLinkedListLike<T>

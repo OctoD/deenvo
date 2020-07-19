@@ -1,11 +1,11 @@
 import { isnull, isundefined, ensureFn } from "./common.ts";
-import IMappable, { MappableFn } from "./IMappable.ts";
-import IFilterable, { FilterableFn } from "./IFilterable.ts";
-import IConditional, { ConditionalFn } from "./IConditional.ts";
-import IUnwrappable, { UnwrappableFn } from "./IUnwrappable.ts";
-import IAssertable from "./IAssertable.ts";
+import { IMappable, MappableFn } from "./IMappable.ts";
+import { IFilterable, FilterableFn } from "./IFilterable.ts";
+import { IConditional, ConditionalFn } from "./IConditional.ts";
+import { IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
+import { IAssertable } from "./IAssertable.ts";
 import { Result, ok, err } from "./result.ts";
-import { Maybe, just, nothing } from "./mod.ts";
+import { Maybe, just, nothing } from "./maybe.ts";
 
 export class OptionLike<T>
   implements

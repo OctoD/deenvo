@@ -1,6 +1,6 @@
 export type UnwrappableFn<T> = () => T;
 
-export default interface IUnwrappable<T> {
+export interface IUnwrappable<T> {
   /**
    * It should unwrap contained value `T` if is valid, otherwise it should throw an Error
    *

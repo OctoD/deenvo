@@ -1,9 +1,9 @@
-import IMappable, { MappableFn } from "./IMappable.ts";
-import IAssertable from "./IAssertable.ts";
-import IConditional, { ConditionalFn } from "./IConditional.ts";
+import { IMappable, MappableFn } from "./IMappable.ts";
+import {IAssertable} from "./IAssertable.ts";
+import { IConditional, ConditionalFn } from "./IConditional.ts";
 import { ensureFn } from "./common.ts";
-import IUnwrappable, { UnwrappableFn } from "./IUnwrappable.ts";
-import { Maybe, just, nothing } from "./mod.ts";
+import { IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
+import { Maybe, just, nothing } from "./maybe.ts";
 import { Option, some, none } from "./option.ts";
 
 export class ResultLike<T, E extends Error = Error>

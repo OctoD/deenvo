@@ -15,7 +15,7 @@ export interface IEnumerableIndexable<T, Container = T> {
   readonly length: number;
 }
 
-export default interface IEnumerable<T, Container = T>
+export interface IEnumerable<T, Container = T>
   extends
     IEnumerableIndexable<T, Container>,
     IEnumerableIterable<T, Container>,
