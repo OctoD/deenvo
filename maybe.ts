@@ -12,7 +12,7 @@ export class MaybeLike<T>
   public constructor(
     protected _value: T,
     protected _isjust: boolean = !!_value,
-  ) { }
+  ) {}
 
   /**
    * Returns `Maybe<U>` if `T` is `Just<T>`, otherwise returns `Maybe<T>`

@@ -1,15 +1,15 @@
-import { ensureFn } from './common.ts';
-import { IAssertable } from './IAssertable.ts';
+import { ensureFn } from "./common.ts";
+import { IAssertable } from "./IAssertable.ts";
 import { IImmediateComparisonConditional } from "./IConditional.ts";
 import { FilterableFn, IFilterable } from "./IFilterable.ts";
-import { IInsertable } from './IInsertable.ts';
+import { IInsertable } from "./IInsertable.ts";
 import {
   IComputedMappable,
   IImmediateMappable,
   MappableFn,
 } from "./IMappable.ts";
 import { IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
-import { just, nothing, Maybe } from './maybe.ts';
+import { just, nothing, Maybe } from "./maybe.ts";
 import { none, Option, some } from "./option.ts";
 import { err, ok, Result } from "./result.ts";
 
@@ -59,7 +59,7 @@ export class ListLike<T>
    * @memberof ListLike
    */
   public filter(fn: FilterableFn<T>): List<T> {
-    ensureFn(fn, 'List.filter fn argument must be a function');
+    ensureFn(fn, "List.filter fn argument must be a function");
     return this.isFilled() ? new ListLike(this._args.filter(fn)) : this;
   }
 
@@ -72,7 +72,7 @@ export class ListLike<T>
    * @memberof ListLike
    */
   public filterOr(def: List<T>, fn: FilterableFn<T>): List<T> {
-    ensureFn(fn, 'List.filterOr fn argument must be a function');
+    ensureFn(fn, "List.filterOr fn argument must be a function");
     if (this.isFilled()) {
       const result = this._args.filter(fn);
       return result.length > 0 ? new ListLike(result) : def;
@@ -131,7 +131,7 @@ export class ListLike<T>
    * @memberof ListLike
    */
   public map<U>(fn: MappableFn<T, U>): List<T | U> {
-    ensureFn(fn, 'List.map fn argument must be a function');
+    ensureFn(fn, "List.map fn argument must be a function");
     return this.isFilled() ? new ListLike(this._args.map(fn)) : this;
   }
 
@@ -145,7 +145,7 @@ export class ListLike<T>
    * @memberof ListLike
    */
   public mapOr<U>(def: List<U>, fn: MappableFn<T, U>): List<U> {
-    ensureFn(fn, 'List.mapOr fn argument must be a function');
+    ensureFn(fn, "List.mapOr fn argument must be a function");
     return this.isFilled() ? new ListLike(this._args.map(fn)) : def;
   }
 
@@ -251,7 +251,7 @@ export class ListLike<T>
    * @memberof ListLike
    */
   public unwrapOrElse(fn: UnwrappableFn<T[]>): T[] {
-    ensureFn(fn, 'List.unwrapOrElse fn argument must be a function');
+    ensureFn(fn, "List.unwrapOrElse fn argument must be a function");
     return this.isFilled() ? this._args : fn();
   }
 }

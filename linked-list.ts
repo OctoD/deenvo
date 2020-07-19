@@ -2,7 +2,7 @@ import { IInsertable } from "./IInsertable.ts";
 import { IImmediateMappable, MappableFn } from "./IMappable.ts";
 import { IEnumerableQueryable } from "./IEnumerable.ts";
 import { ok, err, Result } from "./result.ts";
-import { ensureFn } from './common.ts';
+import { ensureFn } from "./common.ts";
 
 export class LinkedListLike<T>
   implements
@@ -116,8 +116,8 @@ export class LinkedListLike<T>
    * @memberof LinkedListLike
    */
   public map<U>(fn: MappableFn<T, U>): LinkedList<T | U> {
-    ensureFn(fn, 'LinkedList.map fn argument must be a function');
-    
+    ensureFn(fn, "LinkedList.map fn argument must be a function");
+
     if (this.isempty()) {
       return this;
     }

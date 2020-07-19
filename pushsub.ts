@@ -30,7 +30,7 @@ function createsubscriber<Fn extends FnBase>(
   subscribers: Set<Fn>,
 ): PushSub<Fn>["subscribe"] {
   return (fn) => {
-    ensureFn(fn, 'PushSub.subscribe fn argument must be a function');
+    ensureFn(fn, "PushSub.subscribe fn argument must be a function");
     subscribers.add(fn);
     return () => subscribers.delete(fn);
   };

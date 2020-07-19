@@ -9,7 +9,7 @@ export * from "./IUnwrappable.ts";
 
 export * as common from "./common.ts";
 export * as types from "./runtimetypes.wellknown.ts";
-export * from './doubly-linked-list.ts';
+export * from "./doubly-linked-list.ts";
 export * from "./list.ts";
 export * from "./linked-list.ts";
 export * from "./maybe.ts";

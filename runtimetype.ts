@@ -4,7 +4,7 @@ import { IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
 import { Result, ok, err } from "./result.ts";
 import { Option, some, none } from "./option.ts";
 import { Maybe, just, nothing } from "./maybe.ts";
-import { IAssertable } from './IAssertable.ts';
+import { IAssertable } from "./IAssertable.ts";
 
 export class RuntimeTypeLike<T>
   implements

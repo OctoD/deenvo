@@ -63,8 +63,8 @@ export function queue<T extends FnBase>(...args: T[]): Queue<T> {
 
   if (args.length > 0) {
     args.forEach((a) => {
-      ensureFn(a, 'Queue.fn argument must be a function');
-      mystack.insert(queueable(a))
+      ensureFn(a, "Queue.fn argument must be a function");
+      mystack.insert(queueable(a));
     });
   }
 
