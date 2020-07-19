@@ -1,9 +1,13 @@
+import "./tests/doubly-linked-list.test.ts";
+import "./tests/linked-list.test.ts";
 import "./tests/list.test.ts";
 import "./tests/maybe.test.ts";
 import "./tests/option.test.ts";
 import "./tests/pushsub.test.ts";
+import "./tests/queue.test.ts";
 import "./tests/result.test.ts";
 import "./tests/runtimetype.test.ts";
 import "./tests/runtimetypes.wellknown.test.ts";
 import "./tests/safe.test.ts";
+import "./tests/stack.test.ts";
 import "./tests/tuple.test.ts";

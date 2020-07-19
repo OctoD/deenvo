@@ -56,7 +56,7 @@ export interface IImmediateComparisonConditional<T> {
   ): IImmediateComparisonConditional<T | U>;
 }
 
-export default interface IConditional<T>
+export interface IConditional<T>
   extends
     IImmediateComparisonConditional<T>,
     IComputedComparisonConditional<T> {}

@@ -3,7 +3,7 @@
 # IInsertable
 
 ```ts
-export default interface IInsertable<T> {
+export interface IInsertable<T> {
   /**
    * It inserts a value `T`
    *

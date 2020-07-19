@@ -48,7 +48,7 @@ export interface ITernaryComputedMappable<T> {
   ): ITernaryComputedMappable<U>;
 }
 
-export default interface IMappable<T>
+export interface IMappable<T>
   extends
     IImmediateMappable<T>,
     IComputedMappable<T>,

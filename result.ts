@@ -1,9 +1,9 @@
-import IMappable, { MappableFn } from "./IMappable.ts";
-import IAssertable from "./IAssertable.ts";
-import IConditional, { ConditionalFn } from "./IConditional.ts";
+import { IMappable, MappableFn } from "./IMappable.ts";
+import {IAssertable} from "./IAssertable.ts";
+import { IConditional, ConditionalFn } from "./IConditional.ts";
 import { ensureFn } from "./common.ts";
-import IUnwrappable, { UnwrappableFn } from "./IUnwrappable.ts";
-import { Maybe, just, nothing } from "./mod.ts";
+import { IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
+import { Maybe, just, nothing } from "./maybe.ts";
 import { Option, some, none } from "./option.ts";
 
 export class ResultLike<T, E extends Error = Error>
@@ -113,7 +113,8 @@ export class ResultLike<T, E extends Error = Error>
    * @memberof ResultLike
    */
   public map<U>(fn: MappableFn<T, U>): Result<T | U> {
-    return this.isOk() ? result(fn(this._value)) : this;
+      ensureFn(fn, 'Result.map fn argument must be a function');
+      return this.isOk() ? result(fn(this._value)) : this;
   }
 
   /**
@@ -125,7 +126,8 @@ export class ResultLike<T, E extends Error = Error>
    * @memberof ResultLike
    */
   public mapOr<U>(def: Result<U>, fn: MappableFn<T, U>): Result<U> {
-    return this.isOk() ? result(fn(this._value)) : def;
+      ensureFn(fn, 'Result.mapOr fn argument must be a function');
+      return this.isOk() ? result(fn(this._value)) : def;
   }
 
   /**
@@ -140,7 +142,9 @@ export class ResultLike<T, E extends Error = Error>
     defFn: MappableFn<T, U>,
     fn: MappableFn<T, U>,
   ): Result<U> {
-    return this.isOk() ? result(fn(this._value)) : result(defFn(this._value));
+      ensureFn(defFn, 'Result.mapOrElse defFn argument must be a function');
+      ensureFn(fn, 'Result.mapOrElse fn argument must be a function');
+      return this.isOk() ? result(fn(this._value)) : result(defFn(this._value));
   }
 
   /**

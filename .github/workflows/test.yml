@@ -1,0 +1,12 @@
+name: Deno test
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Deno environment
+        uses: denolib/setup-deno@v2.0.0
+      - run: deno test mod.test.ts

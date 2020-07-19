@@ -1,8 +1,8 @@
-import IMappable, { MappableFn } from "./IMappable.ts";
+import { IMappable, MappableFn } from "./IMappable.ts";
 import { ensureFn } from "./common.ts";
-import IUnwrappable, { UnwrappableFn } from "./IUnwrappable.ts";
-import IAssertable from "./IAssertable.ts";
-import { IConditional } from "./mod.ts";
+import { IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
+import { IAssertable } from "./IAssertable.ts";
+import { IConditional } from "./IConditional.ts";
 import { ConditionalFn } from "./IConditional.ts";
 import { Option, some, none } from "./option.ts";
 import { Result, ok, err } from "./result.ts";
@@ -12,7 +12,7 @@ export class MaybeLike<T>
   public constructor(
     protected _value: T,
     protected _isjust: boolean = !!_value,
-  ) {}
+  ) { }
 
   /**
    * Returns `Maybe<U>` if `T` is `Just<T>`, otherwise returns `Maybe<T>`

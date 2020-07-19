@@ -58,12 +58,12 @@ Deno.test("maybe.IMappable", () => {
     "nothing maps to nothing",
   );
   assertEquals(
-    nothing().mapOr(maybe(10), (b: any) => b ** 2).unwrapOr("nope"),
+    nothing().mapOr(maybe(10), (b: any) => b ** 2).unwrapOr(-10),
     10,
     "nothing or maps to or",
   );
   assertEquals(
-    nothing().mapOrElse(() => 1000, (b: any) => b ** 2).unwrapOr("nope"),
+    nothing().mapOrElse(() => 1000, (b: any) => b ** 2).unwrapOr(-10),
     1000,
     "nothing or else maps to or else",
   );
