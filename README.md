@@ -1,5 +1,7 @@
 # deenvo 🦕
 
+![Deno test](https://github.com/OctoD/deenvo/workflows/Deno%20test/badge.svg)
+
 Data structures and data types for Deno.
 
 - [deenvo 🦕](#deenvo-)
