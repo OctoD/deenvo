@@ -23,6 +23,7 @@ export { default as IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
 
 export * as common from "./common.ts";
 export * as types from "./runtimetypes.wellknown.ts";
+export { DoublyLinkedList, DoublyLinkedListLike, DoublyNode, doublylinkedlist, doublynode } from './doubly-linked-list.ts';
 export { List, list, ListLike } from "./list.ts";
 export {
   LinkedList,
