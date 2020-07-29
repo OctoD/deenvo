@@ -5,6 +5,7 @@ import "./tests/maybe.test.ts";
 import "./tests/option.test.ts";
 import "./tests/pushsub.test.ts";
 import "./tests/queue.test.ts";
+import "./tests/range.test.ts";
 import "./tests/result.test.ts";
 import "./tests/runtimetype.test.ts";
 import "./tests/runtimetypes.wellknown.test.ts";

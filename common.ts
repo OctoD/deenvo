@@ -7,6 +7,10 @@ export function isnull(arg: unknown): arg is null {
   return arg === null;
 }
 
+export function isdate(arg: unknown): arg is Date {
+  return arg instanceof Date;
+}
+
 export function isundefined(arg: unknown): arg is undefined {
   return arg === undefined;
 }
