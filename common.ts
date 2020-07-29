@@ -11,6 +11,10 @@ export function isdate(arg: unknown): arg is Date {
   return arg instanceof Date;
 }
 
+export function isnumber(arg: unknown): arg is number {
+  return typeof arg === 'number';
+}
+
 export function isundefined(arg: unknown): arg is undefined {
   return arg === undefined;
 }

@@ -3,7 +3,8 @@ import {
   assert,
   assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
-import { daterange, range } from "../range.ts";
+import { isnumber } from '../common.ts';
+import { daterange, range, rangefactory } from "../range.ts";
 
 Deno.test('Range (empty)', () => {
   const my = range();
@@ -55,4 +56,21 @@ Deno.test('Daterange', () => {
 
 Deno.test('range (numeric)', () => {
   assertEquals(range(0, 10).length, 11)
+  assertEquals(range(0, 9).toArray(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+})
+
+Deno.test('readme example', () => {
+  const doublednumbersrange = rangefactory<number>((start, end) => {
+    const range: number[] = [];
+    
+    if (isnumber(start) && isnumber(end)) {
+      while (range.length <= Math.abs(start - end)) {
+        range.push((start + range.length) * 2);
+      }
+    }
+  
+    return range;
+  });
+
+  assertEquals(doublednumbersrange(1, 3).toArray(), [2, 4, 6])
 })

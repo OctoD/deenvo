@@ -1,4 +1,4 @@
-import { ensureFn, isdate } from './common.ts'
+import { ensureFn, isdate, isnumber } from './common.ts'
 import { IInsertable } from './IInsertable.ts';
 import { EnumerableForEachFn, IEnumerable } from './IEnumerable.ts';
 
@@ -17,10 +17,33 @@ export class RangeLike<T> implements IEnumerable<number, T>, IInsertable<T> {
     }
   }
   
+  /**
+   * Checks if a `Range<T>` contains a value `T` at a specific `index`
+   * 
+   * ```ts
+   * range(1, 5).contains(12)   // false
+   * range(1, 5).contains(3)    // true
+   * ```
+   *
+   * @param {number} index
+   * @returns {boolean}
+   * @memberof RangeLike
+   */
   public contains(index: number): boolean {
     return this[index] !== undefined;
   }
 
+  /**
+   * Loops each range item `T`
+   * 
+   * ```ts
+   * range(1, 5).forEach(console.log) // logs 1, 2, 3, 4, 5
+   * ```
+   *
+   * @param {EnumerableForEachFn<T>} fn
+   * @param {boolean} [reversed=false]
+   * @memberof RangeLike
+   */
   public forEach(fn: EnumerableForEachFn<T>, reversed = false): void {
     ensureFn(fn, 'Range.forEach argument must be a function');
     
@@ -33,6 +56,13 @@ export class RangeLike<T> implements IEnumerable<number, T>, IInsertable<T> {
     }
   }
 
+  /**
+   * Gets an item `T` at `index`. Throws if the value is undefined
+   *
+   * @param {number} index
+   * @returns {T}
+   * @memberof RangeLike
+   */
   public get(index: number): T {
     if (this.contains(index)) {
       return this[index];
@@ -41,6 +71,17 @@ export class RangeLike<T> implements IEnumerable<number, T>, IInsertable<T> {
     throw new ReferenceError(`Item at position {${index}} is undefined`);
   }
 
+  /**
+   * Inserts a value `T`
+   * 
+   * ```ts
+   * range(1, 5).insert(9) // range[1, 2, 3, 4, 5, 9]
+   * ```
+   *
+   * @param {T} arg
+   * @returns
+   * @memberof RangeLike
+   */
   public insert(arg: T) {
     if (arg === undefined) {
       return this;
@@ -51,6 +92,17 @@ export class RangeLike<T> implements IEnumerable<number, T>, IInsertable<T> {
     return this;
   }
 
+  /**
+   * Removes the given argument from range
+   * 
+   * ```ts
+   * range(5, 10).remove(7) // range[5, 6, 8, 9, 10]
+   * ```
+   *
+   * @param {T} arg
+   * @returns
+   * @memberof RangeLike
+   */
   public remove(arg: T) {
     let shouldreassign = undefined;
     let removed = 0;
@@ -73,6 +125,22 @@ export class RangeLike<T> implements IEnumerable<number, T>, IInsertable<T> {
     this._length -= removed;
 
     return this;
+  }
+
+  /**
+   * Returns current `Range<T>` as a `T[]`
+   * 
+   * ```ts
+   * range(0, 5).toArray() // [0, 1, 2, 3, 4, 5];
+   * ```
+   *
+   * @returns {T[]}
+   * @memberof RangeLike
+   */
+  public toArray(): T[] {
+    const result: T[] = [];
+    this.forEach(arg => result.push(arg));
+    return result;
   }
 }
 
@@ -106,7 +174,7 @@ export const daterange = rangefactory<Date>((start, end) => {
 });
 
 export const range = rangefactory<number>((start, end) => {
-  if (typeof start === 'number' && typeof end === 'number') {
+  if (isnumber(start) && isnumber(end)) {
     const range: number[] = [];
 
     while (range.length <= Math.abs(start - end)) {
