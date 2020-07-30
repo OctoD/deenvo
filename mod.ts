@@ -16,6 +16,7 @@ export * from "./maybe.ts";
 export * from "./option.ts";
 export * from "./pushsub.ts";
 export * from "./queue.ts";
+export * from "./range.ts";
 export * from "./result.ts";
 export * from "./runtimetype.ts";
 export * from "./safe.ts";

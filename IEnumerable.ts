@@ -2,7 +2,7 @@ export type EnumerableForEachFn<Container> = (arg: Container) => any;
 
 export interface IEnumerableIterable<T, Container = T> {
   forEach(fn: EnumerableForEachFn<Container>): void;
-  forEach(fn: (arg: Container) => any, reversed: boolean): void;
+  forEach(fn: EnumerableForEachFn<Container>, reversed: boolean): void;
 }
 
 export interface IEnumerableQueryable<T, Container = T> {
