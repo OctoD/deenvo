@@ -35,6 +35,7 @@ Types
 - [option](option.ts.md)
 - [pushsub](pushsub.ts.md)
 - [queue](queue.ts.md)
+- [range](range.ts.md)
 - [result](result.ts.md)
 - [runtimetype](runtimetype.ts.md)
   - [wellknowntypes](runtimetypes.wellknown.ts.md)
