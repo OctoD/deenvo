@@ -1,14 +1,16 @@
-import "./tests/doubly-linked-list.test.ts";
-import "./tests/linked-list.test.ts";
-import "./tests/list.test.ts";
-import "./tests/maybe.test.ts";
-import "./tests/option.test.ts";
-import "./tests/pushsub.test.ts";
-import "./tests/queue.test.ts";
-import "./tests/range.test.ts";
-import "./tests/result.test.ts";
-import "./tests/runtimetype.test.ts";
-import "./tests/runtimetypes.wellknown.test.ts";
-import "./tests/safe.test.ts";
-import "./tests/stack.test.ts";
-import "./tests/tuple.test.ts";
+import "./tests/applicative.test.ts";
+import "./tests/assertables.test.ts";
+import "./tests/cast.test.ts";
+import "./tests/conditionals.test.ts";
+import "./tests/either.test.ts";
+import "./tests/foldable.test.ts";
+import "./tests/mappables.test.ts";
+import "./tests/pipe.test.ts";
+import "./tests/predicate.test.ts";
+import "./tests/trycatch.test.ts";
+import "./tests/typeguards.test.ts";
+import "./tests/unwrappables.test.ts";
+
+// more complex tests
+
+import "./tests/more-complex-tests.ts";

@@ -1,298 +1,138 @@
-import { IMappable, MappableFn } from "./IMappable.ts";
-import { IAssertable } from "./IAssertable.ts";
-import { IConditional, ConditionalFn } from "./IConditional.ts";
-import { ensureFn } from "./common.ts";
-import { IUnwrappable, UnwrappableFn } from "./IUnwrappable.ts";
-import { Maybe, just, nothing } from "./maybe.ts";
-import { Option, some, none } from "./option.ts";
+import {
+  check,
+  definetype,
+} from "./applicative.ts";
+import { createExpect } from "./assertables.ts";
+import { createFilter, createFilterOr } from "./filterables.ts";
+import { createMap, createMapOr, createMapOrElse } from "./mappables.ts";
+import {
+  createTaggedWithValue,
+  isTagged,
+  isTaggedWith,
+  TaggedWithValue,
+  TaggedWithValueFactory,
+} from "./tagged-type.ts";
+import * as tg from "./typeguards.ts";
+import {
+  createUnwrap,
+  createUnwrapOr,
+  createUnwrapOrElse,
+} from "./unwrappables.ts";
 
-export class ResultLike<T, E extends Error = Error>
-  implements IAssertable<T>, IConditional<T>, IMappable<T>, IUnwrappable<T> {
-  public constructor(
-    protected _value: T,
-    protected _error: E | null = null,
-  ) {
-    if (_value instanceof Error) {
-      this._value = undefined as unknown as T;
-      this._error = _value as unknown as E;
-    }
-  }
+//#region types
 
-  /**
-   * Returns Result<U> if Result<T> is ok, otherwise returns Result<T>
-   * 
-   * ```ts
-   * ok(10).and(ok(20)).isOk() // true
-   * ok(10).and(err('darn')).isOk() // false
-   * err('darn darn').and(ok(20)).isOk() // false
-   * ```
-   *
-   * @template U
-   * @param {Result<U>} other
-   * @returns {(Result<T | U>)}
-   * @memberof ResultLike
-   */
-  public and<U>(other: Result<U>): Result<T | U> {
-    return this.isOk() ? other : this;
-  }
+const ERRTAG = "err";
+const OKTAG = "ok";
+const RESULTTAG = "result";
 
-  /**
-   * Calls `fn(T): U` if `Result<T>` is ok and returns `Result<U>`, otherwise returns `Result<T>`
-   * 
-   * ```ts
-   * ok(10).andThen(value => value * 2).unwrap() // 20
-   * ok(10).andThen(() => { throw new Error('pizzaaaaaa') }).isOk() // false
-   * ```
-   *
-   * @template U
-   * @param {ConditionalFn<T, U>} fn
-   * @returns {(Result<T | U>)}
-   * @memberof ResultLike
-   */
-  public andThen<U>(fn: ConditionalFn<T, U>): Result<T | U> {
-    ensureFn(fn, "Result.andThen fn argument must be a function");
-    return this.isOk() ? result(fn(this._value)) : this;
-  }
+export type Errtag = typeof ERRTAG;
 
-  /**
-   * Throws an `Error` with the given `message` if it is not ok, otherwise returns `Ok<T>`
-   * 
-   * ```ts
-   * err('wait for it').expect('explode')    // throws
-   * ok(10).expect('result is not a number') // does not throw
-   * ```
-   *
-   * @param {string} message
-   * @returns {(Result<T, E> | never)}
-   * @memberof ResultLike
-   */
-  public expect(message: string): Ok<T> | never {
-    if (this.isErr()) {
-      throw new Error(message);
-    }
+export type Oktag = typeof OKTAG;
 
-    return this;
-  }
+export type ResultTag = Errtag | Oktag;
 
-  /**
-   * Returns `true` if the `Result<T>` is an error
-   * 
-   * ```ts
-   * err('').isErr() // true
-   * ok(10).isErr()  // false
-   * ```
-   *
-   * @returns {boolean}
-   * @memberof ResultLike
-   */
-  public isErr(): boolean {
-    return this._value === undefined && this._error instanceof Error;
-  }
+export interface Err extends TaggedWithValue<Error, Errtag> {}
 
-  /**
-   * Returns `true` if the `Result<T>` is ok
-   * 
-   * ```ts
-   * err('').isOk() // false
-   * ok(10).isOk()  // true
-   * ```
-   *
-   * @returns {boolean}
-   * @memberof ResultLike
-   */
-  public isOk(): boolean {
-    return !this.isErr();
-  }
+export interface Ok<T = unknown> extends TaggedWithValue<T, Oktag> {}
 
-  /**
-   * Calls `fn(T): U` is the `Result<T>` is ok and returns a new `Result<U>`, otherwise returns `Result<T>`
-   *
-   * @template U
-   * @param {MappableFn<T, U>} fn
-   * @returns {(Result<T | U>)}
-   * @memberof ResultLike
-   */
-  public map<U>(fn: MappableFn<T, U>): Result<T | U> {
-    ensureFn(fn, "Result.map fn argument must be a function");
-    return this.isOk() ? result(fn(this._value)) : this;
-  }
+export type Result<T = unknown> = Ok<T> | Err;
 
-  /**
-   * Calls `fn(T): U` is the `Result<T>` is ok and returns a new `Result<U>`, otherwise returns `def`
-   *
-   * @template U
-   * @param {MappableFn<T, U>} fn
-   * @returns {(Result<T | U>)}
-   * @memberof ResultLike
-   */
-  public mapOr<U>(def: Result<U>, fn: MappableFn<T, U>): Result<U> {
-    ensureFn(fn, "Result.mapOr fn argument must be a function");
-    return this.isOk() ? result(fn(this._value)) : def;
-  }
+export type ErrFactory = (message: string | Error) => Err;
+export type OkFactory = <T>(arg: T) => Ok<T>;
+export type ResultFactory = <T>(arg: T) => Result<T>;
 
-  /**
-   * Calls `fn(T): U` is the `Result<T>` is ok and returns a new `Result<U>`, otherwise calls `defFn(T): U`
-   *
-   * @template U
-   * @param {MappableFn<T, U>} fn
-   * @returns {(Result<T | U>)}
-   * @memberof ResultLike
-   */
-  public mapOrElse<U>(
-    defFn: MappableFn<T, U>,
-    fn: MappableFn<T, U>,
-  ): Result<U> {
-    ensureFn(defFn, "Result.mapOrElse defFn argument must be a function");
-    ensureFn(fn, "Result.mapOrElse fn argument must be a function");
-    return this.isOk() ? result(fn(this._value)) : result(defFn(this._value));
-  }
-
-  /**
-   * If is ok, returns `Just<T>`, otherwise `Nothing<T>`;
-   *
-   * @returns {Maybe<T>}
-   * @memberof ResultLike
-   */
-  public maybe(): Maybe<T> {
-    return this.isOk() ? just(this._value) : nothing();
-  }
-
-  /**
-   * If is ok, returns a `Some<T>`, otherwise `None`;
-   *
-   * @returns {Maybe<T>}
-   * @memberof ResultLike
-   */
-  public option(): Option<T> {
-    return this.isOk() ? some(this._value) : none();
-  }
-
-  /**
-   * If `Result<T>` is `Err`, returns `other`, otherwise returns `Result<T>`
-   * 
-   * ```ts
-   * ok(1).or(ok(2)).unwrap()       // 1
-   * err('darn').or(ok(1)).unwrap() // 1
-   * ```
-   *
-   * @template U
-   * @param {Result<U>} other
-   * @returns {(Result<T | U>)}
-   * @memberof ResultLike
-   */
-  public or<U>(other: Result<U>): Result<T | U> {
-    return this.isErr() ? other : this;
-  }
-
-  /**
-   * If `Result<T>` is `Err`, calls `fn(T): U`, otherwise returns `Result<T>`
-   * 
-   * ```ts
-   * ok(10).orThen(() => 20).unwrap()       // 10
-   * err('errrr').orThen(() => 10).unwrap() // 10
-   * ```
-   *
-   * @template U
-   * @param {ConditionalFn<T, U>} fn
-   * @returns {(Result<T | U>)}
-   * @memberof ResultLike
-   */
-  public orThen<U>(fn: ConditionalFn<T, U>): Result<T | U> {
-    ensureFn(fn, "Result.andThen fn argument must be a function");
-    return this.isErr() ? result(fn(this._value)) : this;
-  }
-
-  /**
-   * Throws if is `ok`, otherwise returns `Err<T>`
-   *
-   * @param {string} message
-   * @returns {(never | Err<T>)}
-   * @memberof ResultLike
-   */
-  public unexpect(message: string): never | Err<T> {
-    if (this.isOk()) {
-      throw new Error(message);
-    }
-
-    return err(this._error as E);
-  }
-
-  /**
-   * If is ok, returns `T`, otherwise throws an error
-   *
-   * @param {string} errormessage
-   * @returns {(T | never)}
-   * @memberof ResultLike
-   */
-  public unwrap(errormessage: string = "Cannot unwrap Err<T>"): T | never {
-    this.expect(errormessage);
-    return this._value;
-  }
-
-  /**
-   * Returns `T` if is ok, otherwise returns `fallback`
-   *
-   * @param {T} fallback
-   * @returns {T}
-   * @memberof ResultLike
-   */
-  public unwrapOr(fallback: T): T {
-    return this.isOk() ? this._value : fallback;
-  }
-
-  /**
-   * Returns `T` if is ok, otherwise calls `fn(): T`
-   *
-   * @param {UnwrappableFn<T>} fn
-   * @returns {T}
-   * @memberof ResultLike
-   */
-  public unwrapOrElse(fn: UnwrappableFn<T>): T {
-    return this.isOk() ? this._value : fn();
+declare module "./applicative.ts" {
+  interface TypesTable {
+    readonly [ERRTAG]: ErrFactory;
+    readonly [OKTAG]: OkFactory;
+    readonly [RESULTTAG]: ResultFactory;
   }
 }
 
-export type Err<T = any> = ResultLike<T>;
-export type Ok<T> = ResultLike<T>;
-export type Result<T, E extends Error = Error> = ResultLike<T, E>;
+//#endregion
 
-/**
- * Creates an `Err<T>`
- *
- * @export
- * @template T
- * @param {(string | Error)} messageOrError
- * @returns {Err<T>}
- */
-export function err<T = any>(messageOrError: string | Error): Err<T> {
-  return typeof messageOrError === "string"
-    ? result<T>(new Error(messageOrError))
-    : result<T>(messageOrError);
-}
+//#region typeguards
 
-/**
- * Creates an `Ok<T>`. It throws if the value is an `Error` instance.
- *
- * @export
- * @template T
- * @param {T} value
- * @returns {Ok<T>}
- */
-export function ok<T>(value: T): Ok<T> {
-  return result(value).expect("ok value must not be an error");
-}
+const hasoktag = isTaggedWith(OKTAG);
+const haserrtag = isTaggedWith(ERRTAG);
+const hasresulttag = tg.or(hasoktag, haserrtag);
 
-/**
- * Creates a `Result<T>`
- *
- * @export
- * @template T
- * @template E
- * @param {(T | E)} value
- * @returns {ResultLike<T, E>}
- */
-export function result<T, E extends Error = Error>(
-  value: T | E,
-): ResultLike<T, E> {
-  return new ResultLike<T, E>(value as T);
-}
+export const isResult = tg.combine(isTagged, hasresulttag) as tg.Typeguard<
+  Result
+>;
+export const isErr = tg.combine(isTagged, haserrtag) as tg.Typeguard<Err>;
+export const isOk = tg.combine(isTagged, hasoktag) as tg.Typeguard<Ok>;
+
+//#endregion
+
+//#region factories
+
+export const err = (message: string | Error): Err =>
+  createTaggedWithValue(
+    message instanceof Error ? message : new Error(message),
+    ERRTAG,
+  );
+
+export const ok = <T>(value: T): Ok<T> =>
+  createTaggedWithValue(
+    check(!tg.iserror(value), "An error cannot be a value of Ok")(value),
+    OKTAG,
+  );
+
+export const result = <T>(value: T): Result<T> =>
+  tg.iserror(value) ? err(value) : ok(value);
+
+definetype(RESULTTAG, result);
+definetype(ERRTAG, err);
+definetype(OKTAG, ok);
+
+//#endregion
+
+//#region assertables
+
+export const expect = createExpect<Result>(isOk);
+export const unexpect = createExpect<Result>(isErr);
+
+//#endregion
+
+//#region filterables
+
+export const filter = createFilter<Result, ResultTag>(
+  isOk,
+  result as TaggedWithValueFactory<ResultTag>,
+  () => err("filter error") as any,
+);
+
+export const filterOr = createFilterOr<Result, ResultTag>(
+  isOk,
+  result as TaggedWithValueFactory<ResultTag>,
+);
+
+//#endregion
+
+//#region mappables
+
+export const map = createMap<Result, ResultTag>(
+  isOk,
+  result as TaggedWithValueFactory<ResultTag>,
+);
+
+export const mapOr = createMapOr<Result, ResultTag>(
+  isOk,
+  result as TaggedWithValueFactory<ResultTag>,
+);
+
+export const mapOrElse = createMapOrElse<Result, ResultTag>(
+  isOk,
+  result as TaggedWithValueFactory<ResultTag>,
+);
+
+//#endregion
+
+//#region unwrappable
+
+export const unwrap = createUnwrap<ResultTag>(isOk, "cannot unwrapp Err");
+export const unwrapOr = createUnwrapOr<ResultTag>(isOk);
+export const unwrapOrElse = createUnwrapOrElse<ResultTag>(isOk);
+
+//#endregion

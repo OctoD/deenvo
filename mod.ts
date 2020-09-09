@@ -1,24 +1,33 @@
-export * from "./IAssertable.ts";
-export * from "./ICallable.ts";
-export * from "./IEnumerable.ts";
-export * from "./IConditional.ts";
-export * from "./IFilterable.ts";
-export * from "./IInsertable.ts";
-export * from "./IMappable.ts";
-export * from "./IUnwrappable.ts";
+export * from "./applicative.ts";
+export * from "./cast.ts";
+export * from "./conditionals.ts";
+export * from "./pipe.ts";
+export * from "./tagged-type.ts";
+export * from "./trycatch.ts";
+export * from "./typeguards.ts";
 
-export * as common from "./common.ts";
-export * as types from "./runtimetypes.wellknown.ts";
-export * from "./doubly-linked-list.ts";
-export * from "./list.ts";
-export * from "./linked-list.ts";
-export * from "./maybe.ts";
-export * from "./option.ts";
-export * from "./pushsub.ts";
-export * from "./queue.ts";
-export * from "./range.ts";
-export * from "./result.ts";
-export * from "./runtimetype.ts";
-export * from "./safe.ts";
-export * from "./stack.ts";
-export * from "./tuple.ts";
+import * as assertables from "./assertables.ts";
+import * as either from "./either.ts";
+import * as filterables from "./filterables.ts";
+import * as foldables from "./foldables.ts";
+import * as insertables from "./insertables.ts";
+import * as mappables from "./mappables.ts";
+import * as maybe from "./maybe.ts";
+import * as option from "./option.ts";
+import * as predicate from "./predicate.ts";
+import * as result from "./result.ts";
+import * as unwrappables from "./unwrappables.ts";
+
+export {
+  assertables,
+  either,
+  filterables,
+  foldables,
+  insertables,
+  mappables,
+  maybe,
+  option,
+  predicate,
+  result,
+  unwrappables,
+};
