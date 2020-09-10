@@ -210,11 +210,14 @@ export const createStructOf = <TG extends any>(
  * @template TG
  * @param {...TG} typeguards
  */
-export const createTupleOf = <TG extends Typeguard<any>[]>(...typeguards: TG) =>
-  (value: unknown): value is TypegardsTuple<TG> =>
+export const createTupleOf = <TG extends Typeguard<any>[]>(...typeguards: TG) => {
+  const tlength = haslengthof(typeguards.length);
+  
+  return (value: unknown): value is TypegardsTuple<TG> =>
     isarray(value) &&
-    value.length === typeguards.length &&
+    tlength(value) &&
     value.every((arg, index) => typeguards[index] && typeguards[index](arg));
+}
 
 //#endregion
 
