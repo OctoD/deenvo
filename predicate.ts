@@ -27,24 +27,6 @@ export const and = <T>(...predicates: Predicate<T>[]): Predicate<T> =>
   (argument) => predicates.every(fromvalue(argument));
 
 /**
- * Creates a new Predicate<T> which checks if the given argument is not the same as the 
- * one passed to the predicate.
- * 
- * @example
- * const isnotjoe = differentvalue('Joe');
- * 
- * isnotjoe('John');  // true
- * isnotjoe('Lisa');  // true
- * isnotjoe('Joe');   // false
- *
- * @template T
- * @param {T} unexpectedvalue the value you expect not to be there
- * @returns {Predicate<T>}
- */
-export const differentvalue = <T>(unexpectedvalue: T): Predicate<T> =>
-  (argument) => argument !== unexpectedvalue;
-
-/**
  * Creates a new function which accepts a predicate. This predicate will check
  * the given value
  * 
@@ -149,11 +131,29 @@ export const reverse = <T>(arg: Predicate<T>): Predicate<T> =>
   (argument) => !arg(argument);
 
 /**
+ * Creates a new Predicate<T> which checks if the given argument is not the same as the 
+ * one passed to the predicate.
+ * 
+ * @example
+ * const isnotjoe = withdifferentvalue('Joe');
+ * 
+ * isnotjoe('John');  // true
+ * isnotjoe('Lisa');  // true
+ * isnotjoe('Joe');   // false
+ *
+ * @template T
+ * @param {T} unexpectedvalue the value you expect not to be there
+ * @returns {Predicate<T>}
+ */
+export const withdifferentvalue = <T>(unexpectedvalue: T): Predicate<T> =>
+  (argument) => argument !== unexpectedvalue;
+
+/**
  * Creates a new Predicate<T> which checks if the given argument is the same as the 
  * one passed to the predicate.
  * 
  * @example
- * const isnotjoe = samevalue('Joe');
+ * const isnotjoe = withsamevalue('Joe');
  * 
  * isnotjoe('John');  // false
  * isnotjoe('Lisa');  // false
@@ -163,5 +163,5 @@ export const reverse = <T>(arg: Predicate<T>): Predicate<T> =>
  * @param {T} expectedvalue the value you expect not to be there
  * @returns {Predicate<T>}
  */
-export const samevalue = <T>(expectedvalue: T): Predicate<T> =>
+export const withsamevalue = <T>(expectedvalue: T): Predicate<T> =>
   (argument) => argument === expectedvalue;

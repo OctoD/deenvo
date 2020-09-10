@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std@0.66.0/testing/asserts.ts";
 import { createDelete, createInsert } from "../insertables.ts";
-import { differentvalue } from "../predicate.ts";
+import { withdifferentvalue } from "../predicate.ts";
 
 Deno.test("insertables::createInsert", () => {
   const arrayinsert = createInsert((subject: number[]) =>
@@ -15,7 +15,7 @@ Deno.test("insertables::createInsert", () => {
 
 Deno.test("insertables::createDelete", () => {
   const arraydelete = createDelete((subject: number[]) =>
-    (arg: number) => subject.filter(differentvalue(arg))
+    (arg: number) => subject.filter(withdifferentvalue(arg))
   );
   const foo: number[] = [10, 20, 30];
   const testinsert = arraydelete(foo);

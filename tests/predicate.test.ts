@@ -3,12 +3,12 @@ import {
 } from "https://deno.land/std/testing/asserts.ts";
 import * as p from "../predicate.ts";
 
-const p1 = p.samevalue(10);
+const p1 = p.withsamevalue(10);
 const p2 = (arg: unknown) => typeof arg === "number";
 const p3 = (arg: number) => arg < 10;
 const p4 = (arg: number) => arg > 5;
 
-Deno.test("predicate::" + p.samevalue.name, () => {
+Deno.test("predicate::" + p.withsamevalue.name, () => {
   assert(p1(10));
   assert(!p1(11));
   assert(!p1("10" as any));
