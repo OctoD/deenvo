@@ -144,7 +144,30 @@ export type TypeguardsFromStruct<T> = {
 };
 
 /**
- *
+cle * Creates a typeguard representing a complex data structure. It is useful
+ * for object validation.
+ * 
+ * @example
+ * 
+ * interface User {
+ *    name: string;
+ *    mail: string;
+ *    age: number;
+ *    status?: string;
+ * }
+ * 
+ * const isUser = createStructOf<User>({
+ *    name: isstring,
+ *    mail: isstring,
+ *    age: isnumber,
+ *    status: optional(isstring),
+ * });
+ * 
+ * isUser({}) // false
+ * isUser({ age: 100 }) // false
+ * isUser({ age: 100, name: 'foo' }) // false
+ * isUser({ age: 100, name: 'foo', mail: 'hello_at_world.com' }) // true
+ * isUser({ age: '100', name: 'foo', mail: 'hello_at_world.com' }) // false
  *
  * @template TG
  * @param {TG} typeguard
@@ -153,41 +176,32 @@ export const createStructOf = <TG extends any>(
   typeguard: TypeguardsFromStruct<TG>,
 ) =>
   (value: unknown): value is TypeguardsStruct<TG> => {
-    if (isindexable(typeguard) && isindexable(value)) {
-      const keys = Object.keys(typeguard);
-
-      for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
-        const currentvalue = value[key];
-
-        if (!(key in value)) {
-          return false;
-        }
-
-        if (isindexable((typeguard as any)[key])) {
-          const tg = createStructOf((typeguard as any)[key]);
-
-          if (tg(currentvalue)) {
-            continue;
-          }
-
-          return false;
-        } else {
-          if (
-            isfunction((typeguard as any)[key]) &&
-            (typeguard as any)[key](currentvalue)
-          ) {
-            continue;
-          }
-
-          return false;
-        }
-      }
-
-      return true;
-    } else {
+    if (!isindexable(typeguard) || !isindexable(value)) {
       return false;
     }
+    
+    const keys = Object.keys(typeguard);
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const currentvalue = value[key];
+
+      if (!(key in value)) {
+        return false;
+      }
+
+      const currenttg = typeguard[key as keyof typeof typeguard];
+      const case1 = isindexable(currenttg) && createStructOf(currenttg as any)(currentvalue);
+      const case2 = isfunction(currenttg) && currenttg(currentvalue);
+
+      if (case1 || case2) {
+        continue;
+      }
+
+      return false;
+    }
+
+    return true;
   };
 
 /**
