@@ -8,14 +8,26 @@ import {
   Typeguard,
 } from "./typeguards.ts";
 
+/**
+ * 
+ */
 export type Tagged<Tagname extends string> = { readonly __tag: Tagname };
 
+/**
+ * 
+ */
 export type TaggedWithValue<T, Tagname extends string> =
   & { readonly value: T }
   & Tagged<Tagname>;
 
+/**
+ * 
+ */
 export type TaggedFactory<Tagname extends string> = () => Tagged<Tagname>;
 
+/**
+ * 
+ */
 export type TaggedWithValueFactory<Tagname extends string> = <T>(
   arg: T,
 ) => TaggedWithValue<T, Tagname>;

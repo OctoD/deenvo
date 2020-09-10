@@ -1,5 +1,14 @@
 import { err, ok, Result } from "./result.ts";
 
+/**
+ *
+ *
+ * @template FnTry
+ * @template K
+ * @param {FnTry} fn
+ * @param {...K} args
+ * @returns {Result<ReturnType<FnTry>>}
+ */
 export const trycatch = <FnTry extends (...args: K) => any, K extends any[]>(
   fn: FnTry,
   ...args: K
@@ -11,6 +20,15 @@ export const trycatch = <FnTry extends (...args: K) => any, K extends any[]>(
   }
 };
 
+/**
+ *
+ *
+ * @template FnTry
+ * @template K
+ * @param {FnTry} fn
+ * @param {...K} args
+ * @returns {Promise<ReturnType<FnTry> extends Promise<infer U> ? Result<U> : never>}
+ */
 export const trycatchAsync = async <
   FnTry extends (...args: K) => Promise<any>,
   K extends any[],

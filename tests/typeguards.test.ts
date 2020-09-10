@@ -65,3 +65,54 @@ Deno.test("typeguards factories", () => {
   );
   assert(!struct1({}));
 });
+
+Deno.test('typeguards::' + tg.nullable.name, () => {
+  const isnullablenumber = tg.nullable(tg.isnumber);
+
+  assert(isnullablenumber(null));
+  assert(isnullablenumber(1000));
+  assert(!isnullablenumber('10'));
+});
+
+Deno.test('typeguards::' + tg.optional.name, () => {
+  const isoptionalnumber = tg.optional(tg.isnumber);
+
+  assert(!isoptionalnumber(null));
+  assert(isoptionalnumber(undefined));
+  assert(isoptionalnumber(1000));
+  assert(!isoptionalnumber('10'));
+});
+
+Deno.test('typeguards::isarrayof', () => {
+  const isarrayofStrings = tg.isarrayof(tg.isstring);
+  const isarrayofNumbers = tg.isarrayof(tg.isnumber);
+
+  assert(!isarrayofStrings([10, 20, 'hello', 'world']))
+  assert(!isarrayofNumbers([10, 20, 'hello', 'world']))
+  assert(!isarrayofStrings([10, 20]))
+  assert(isarrayofNumbers([10, 20]))
+  assert(isarrayofStrings(['hello', 'world']))
+  assert(!isarrayofNumbers(['hello', 'world']))
+
+  // let's do something better
+  class Foo { 
+    constructor(public name: string, public age: number, public favouritepet?: string) { }
+  }
+  const foo = (name: string, age: number, favouritepet?: string) => new Foo(name, age, favouritepet);
+  const isFoo = tg.createStructOf<Foo>({
+    age: tg.isnumber,
+    name: tg.isstring,
+    favouritepet: tg.optional(tg.isstring),
+  });
+  const isarrayOfFoo = tg.isarrayof(isFoo);
+  const isarrayofNullablesFoo = tg.isarrayof(tg.nullable(isFoo));
+
+  assert(isFoo(new Foo('', 100)))
+  assert(isFoo(new Foo('', 100, 'hello')))
+  assert(isarrayOfFoo([]));
+  assert(isarrayofNullablesFoo([]));
+  assert(!isarrayOfFoo(foo('', 100)))
+  assert(isarrayOfFoo([foo('foo', 22), foo('bar', 33), foo('baz', 44, 'pippo')]))
+  assert(isarrayOfFoo([foo('foo', 22), foo('bar', 33), foo('baz', 44)]))
+  assert(isarrayofNullablesFoo([foo('foo', 22), null, foo('baz', 44)]))
+});

@@ -136,13 +136,15 @@ export const haslengthof = (length: number) =>
 
 //#region typeguards factories
 
+export type TypeguardsFromStruct<T> = { [key in keyof T]: T[key] extends (number | string | boolean | null | undefined | unknown[]) ? Typeguard<T[key]> : TypeguardsFromStruct<T[key]> };
+
 /**
  *
  *
  * @template TG
  * @param {TG} typeguard
  */
-export const createStructOf = <TG extends any>(typeguard: TG) =>
+export const createStructOf = <TG extends any>(typeguard: TypeguardsFromStruct<TG>) =>
   (value: unknown): value is TypeguardsStruct<TG> => {
     if (isindexable(typeguard) && isindexable(value)) {
       const keys = Object.keys(typeguard);
@@ -214,16 +216,70 @@ export const anyof = <T>(
 ): Typeguard<T> => predicate.or.apply(null, predicates) as Typeguard<T>;
 
 /**
+ * Checks if a variable is null or undefined
  * 
+ * @example
+ * isnullOrUndefined(null)      // true
+ * isnullOrUndefined(undefined) // true
+ * isnullOrUndefined('foo')     // false
+ * isnullOrUndefined([])        // false
  */
 export const isnullOrUndefined = combine<null | undefined>(isnull, isundefined);
+
+/**
+ * Checks if a variable is not null or undefined
+ * 
+ * @example
+ * isnotNullOrUndefined(null)      // false
+ * isnotNullOrUndefined(undefined) // false
+ * isnotNullOrUndefined('foo')     // true
+ * isnotNullOrUndefined([])        // true
+ */
 export const isnotNullOrUndefined = combine<object>(isnotnull, isdefined);
 
 /**
- *
+ * Checks if a variable is an array of a given type.
+ * 
+ * @example
+ * const isarrayofStrings = isarrayof(isstring);
+ * 
+ * isarrayofStrings([10, 20, 'hello', 'world']) // false
+ * isarrayofStrings([10, 20])                   // false
+ * isarrayofStrings(['hello', 'world'])         // true
  *
  * @template T
  * @param {Typeguard<T>} typeguard
  */
 export const isarrayof = <T>(typeguard: Typeguard<T>) =>
   (arg: unknown): arg is T[] => isarray(arg) && arg.every(typeguard);
+
+/**
+ * Makes a Typeguard<T> nullable
+ * 
+ * @example
+ * const isnullablenumber = nullable(isnumber);
+ * 
+ * isnullablenumber(null) // true
+ * isnullablenumber(1000) // true
+ * isnullablenumber('10') // false
+ *
+ * @template T
+ * @param {Typeguard<T>} typeguard
+ */
+export const nullable = <T>(typeguard: Typeguard<T>) => anyof<T | null>(isnull, typeguard);
+
+/**
+ * Makes a Typeguard<T> optional
+ * 
+ * @example
+ * const isoptionalnumber = optional(isnumber);
+ * 
+ * isoptionalnumber(undefined)  // true
+ * isoptionalnumber(1000)       // true
+ * isoptionalnumber('10')       // false
+ * isoptionalnumber(null)       // false
+ *
+ * @template T
+ * @param {Typeguard<T>} typeguard
+ */
+export const optional = <T>(typeguard: Typeguard<T>) => anyof<T | undefined>(isundefined, typeguard);
