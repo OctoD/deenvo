@@ -138,6 +138,7 @@ export const isRightOf = <T>(typeguard: Typeguard<T>) =>
  * Creates a Left<T> type
  */
 export const left = <T>(value: T): Left<T> => createTagged(value, LEFTTAG);
+
 /**
  * Creates a Right<T> type
  */
@@ -186,6 +187,7 @@ export const filterRightOr = createFilterOr<Either, EitherTagname>(
  * 
  */
 export const fold = createfold<EitherTagname>(isLeft);
+
 /**
  * 
  */
@@ -199,18 +201,22 @@ export const swap = createSwap<LeftTagname, RightTagname>(isLeft, left, right);
  * 
  */
 export const mapLeft = createMap<Either, EitherTagname>(isLeft, left);
+
 /**
  * 
  */
 export const mapRight = createMap<Either, EitherTagname>(isRight, right);
+
 /**
  * 
  */
 export const mapLeftOr = createMapOr<Either, EitherTagname>(isLeft, left);
+
 /**
  * 
  */
 export const mapRightOr = createMapOr<Either, EitherTagname>(isRight, right);
+
 /**
  * 
  */
@@ -218,6 +224,7 @@ export const mapLeftOrElse = createMapOrElse<Either, EitherTagname>(
   isLeft,
   left,
 );
+
 /**
  * 
  */
@@ -229,44 +236,87 @@ export const mapRigthOrElse = createMapOrElse<Either, EitherTagname>(
 //#region unwrappables
 
 /**
+ * Unwraps Either Left or Right
  * 
+ * @example
+ * unwrapEither(left(10)) // 10
+ * unwrapEither(right(1)) // 1
  */
 export const unwrapEither = createUnwrap(isEither, "");
+
 /**
+ * Unwraps value if Left or throws
  * 
+ * @example
+ * unwrapLeft(left(10)) // 10
+ * unwrapLeft(right(1)) // throws
  */
 export const unwrapLeft = createUnwrap(
   isLeft,
   "Cannot unwrap Right, expected to be Left",
 );
+
 /**
+ * Unwraps value if Right or throws
  * 
+ * @example
+ * unwrapRight(left(10)) // throws
+ * unwrapRight(right(1)) // 1
  */
 export const unwrapRight = createUnwrap(
   isRight,
   "Cannot unwrap Left, expected to be Right",
 );
+
 /**
+ * Unwraps Left value if Left or returns the fallback
  * 
+ * @example
+ * unwrapLeftOr(20)(left(10)) // 10
+ * unwrapLeftOr(20)(right(1)) // 20
  */
 export const unwrapLeftOr = createUnwrapOr(isLeft);
+
 /**
+ * Unwraps Right value if Right or returns the fallback
  * 
+ * @example
+ * unwrapRightOr(20)(left(10)) // 20
+ * unwrapRightOr(20)(right(1)) // 1
  */
 export const unwrapRightOr = createUnwrapOr(isRight);
+
 /**
+ * Unwraps Left value if Left or returns the fallback
  * 
+ * @example
+ * unwrapLeftOrElse(fallback(20))(left(10)) // 10
+ * unwrapLeftOrElse(fallback(30))(right(1)) // 30
  */
 export const unwrapLeftOrElse = createUnwrapOrElse(isLeft);
+
 /**
+ * Unwraps Right value if Right or returns the fallback
  * 
+ * @example
+ * unwrapRightOrElse(fallback(20))(left(10)) // 20
+ * unwrapRightOrElse(fallback(30))(right(1)) // 1
  */
 export const unwrapRightOrElse = createUnwrapOrElse(isRight);
 
 //#endregion
 
 /**
+ * Creates a new either from a given predicate. 
  * 
+ * @example
+ * const iseven = (arg: number) => arg % 2 === 0;
+ * 
+ * frompredicate(iseven)(20) // Right<20>
+ * frompredicate(iseven)(11) // Left<11>
+ *
+ * @template T
+ * @param {Predicate<T>} predicate
  */
 export const frompredicate = <T>(predicate: Predicate<T>) =>
   (arg: T) => predicate(arg) ? right(arg) : left(arg);

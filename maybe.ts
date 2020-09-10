@@ -7,13 +7,13 @@ import {
   createTagged,
   isTagged,
   isTaggedWith,
-  Tagged,
+  Tagged
 } from "./tagged-type.ts";
-import { combine, anyof, Typeguard } from "./typeguards.ts";
+import { anyof, combine } from "./typeguards.ts";
 import {
   createUnwrap,
   createUnwrapOr,
-  createUnwrapOrElse,
+  createUnwrapOrElse
 } from "./unwrappables.ts";
 
 //#region types
@@ -21,17 +21,8 @@ import {
 const JUSTTAG = "just";
 const NOTHINGTAG = "nothing";
 
-/**
- * 
- */
 export type JustTag = typeof JUSTTAG;
-/**
- * 
- */
 export type NothingTag = typeof NOTHINGTAG;
-/**
- * 
- */
 export type MaybeTag = JustTag | NothingTag;
 
 /**
@@ -61,8 +52,8 @@ export type JustFactory = <T>(value: T) => Just<T>;
 
 //#region typeguards
 
-const hasnothingtag = isTaggedWith(NOTHINGTAG) as Typeguard<Nothing>;
-const hasjusttag = isTaggedWith(JUSTTAG) as Typeguard<Just>;
+const hasnothingtag = isTaggedWith(NOTHINGTAG);
+const hasjusttag = isTaggedWith(JUSTTAG);
 
 /**
  * 
@@ -71,10 +62,12 @@ export const isMaybe = combine<Maybe>(
   isTagged,
   anyof(hasnothingtag, hasjusttag),
 );
+
 /**
  * 
  */
 export const isJust = combine<Just>(isTagged, hasjusttag);
+
 /**
  * 
  */
@@ -100,7 +93,7 @@ export const just = <T>(value: T) =>
 /**
  * 
  */
-export const maybe = <T>(arg?: T) => arg ? just(arg!) : nothing();
+export const maybe = <T>(arg?: T) => arg ? just(arg) : nothing();
 
 //#endregion
 
@@ -110,6 +103,7 @@ export const maybe = <T>(arg?: T) => arg ? just(arg!) : nothing();
  * 
  */
 export const expect = createExpect<Just>(isJust);
+
 /**
  * 
  */
@@ -122,6 +116,7 @@ export const unexpect = createExpect<Nothing>(isNothing);
 /**
  * 
  */
+
 export const filter = createFilter(isJust, just, nothing as any);
 /**
  * 
@@ -148,10 +143,12 @@ export const unwrap = createUnwrap<MaybeTag>(
   isJust,
   "Expected Just, got Nothing",
 );
+
 /**
  * 
  */
 export const unwrapOr = createUnwrapOr<MaybeTag>(isJust);
+
 /**
  * 
  */

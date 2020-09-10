@@ -50,6 +50,16 @@ export const check = (condition: boolean, errormessage: string) =>
   <T>(arg: T): T | never => condition ? arg : panic(errormessage);
 
 /**
+ * Creates a function which returns a fallback function
+ * 
+ * @example
+ * either.unwrapLeftOrElse(fallback(10))(right(20)) // 10
+ * 
+ * @param arg 
+ */
+export const fallback = <T>(arg: T) => () => arg;
+
+/**
  * Throws an error with the given message
  *
  * @template E
