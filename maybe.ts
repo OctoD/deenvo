@@ -2,6 +2,7 @@ import { check, definetype } from "./applicative.ts";
 import { createExpect } from "./assertables.ts";
 import { createFilter, createFilterOr } from "./filterables.ts";
 import { createfold } from "./foldables.ts";
+import { Predicate } from "./predicate.ts";
 import {
   createTaggedWithValue,
   isTagged,
@@ -100,3 +101,6 @@ export const unwrapOr = createUnwrapOr<MaybeTag>(isJust);
 export const unwrapOrElse = createUnwrapOrElse<MaybeTag>(isJust);
 
 //#endregion
+
+export const frompredicate = <T>(predicate: Predicate<T>) =>
+  (arg: T) => predicate(arg) ? just(arg) : nothing();

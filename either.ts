@@ -1,6 +1,8 @@
 import { definetype } from "./applicative.ts";
 import { createFilter, createFilterOr } from "./filterables.ts";
 import { createfold, createSwap } from "./foldables.ts";
+import { createMap, createMapOr, createMapOrElse } from "./mappables.ts";
+import { Predicate } from "./predicate.ts";
 import {
   createTaggedWithValue,
   isTagged,
@@ -13,7 +15,6 @@ import {
   createUnwrapOr,
   createUnwrapOrElse,
 } from "./unwrappables.ts";
-import { createMap, createMapOr, createMapOrElse } from "./mappables.ts";
 
 //#region types
 
@@ -129,3 +130,6 @@ export const unwrapLeftOrElse = createUnwrapOrElse(isLeft);
 export const unwrapRightOrElse = createUnwrapOrElse(isRight);
 
 //#endregion
+
+export const frompredicate = <T>(predicate: Predicate<T>) =>
+  (arg: T) => predicate(arg) ? right(arg) : left(arg);

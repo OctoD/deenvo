@@ -3,12 +3,11 @@ import {
   assertEquals,
   assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
-
 import {
-  Either,
   filterLeft,
   filterRight,
   fold,
+  frompredicate,
   isEither,
   isLeft,
   isRight,
@@ -121,4 +120,12 @@ Deno.test("either::unwrappables", () => {
   assertEquals(unwraplorelse(r), 10);
   assertEquals(unwraprorelse(l), 20);
   assertEquals(unwraprorelse(r), 20);
+});
+
+Deno.test("either::frompredicate", () => {
+  const greaterthan5 = (arg: number) => arg > 5;
+  const test = frompredicate(greaterthan5);
+
+  assert(isLeft(test(4)));
+  assert(isRight(test(8)));
 });

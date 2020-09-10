@@ -1,4 +1,4 @@
-import { check, FnBase } from "./applicative.ts";
+import { FnBase } from "./applicative.ts";
 import * as predicate from "./predicate.ts";
 
 //#region types
@@ -23,12 +23,16 @@ export type TypegardsTuple<T extends Typeguard<any>[]> = {
 
 //#region primitives
 
-export const isarray = ((arg) => Array.isArray(arg)) as Typeguard<any[]>;
+export const isarray = ((arg) => Array.isArray(arg)) as Typeguard<unknown[]>;
 
 export const isbigint = ((arg) => typeof arg === "bigint") as Typeguard<bigint>;
 
 export const isboolean = ((arg) => typeof arg === "boolean") as Typeguard<
   boolean
+>;
+
+export const isdefined = ((arg) => typeof arg !== "undefined") as Typeguard<
+  object
 >;
 
 export const isfunction = ((arg) => typeof arg === "function") as Typeguard<
@@ -46,6 +50,8 @@ export const isundefined = ((arg) => typeof arg === "undefined") as Typeguard<
 >;
 
 export const isnull = ((arg) => arg === null) as Typeguard<null>;
+
+export const isnotnull = ((arg) => arg !== null) as Typeguard<object>;
 
 //#endregion
 
@@ -210,7 +216,8 @@ export const or = <T>(
 /**
  * 
  */
-export const isnullOrUndefined = combine(isnull, isundefined);
+export const isnullOrUndefined = combine<null | undefined>(isnull, isundefined);
+export const isnotNullOrUndefined = combine<object>(isnotnull, isdefined);
 
 /**
  *
