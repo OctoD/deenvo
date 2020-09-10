@@ -1,6 +1,6 @@
 import {
   check,
-  definetype
+  definetype,
 } from "./applicative.ts";
 import { createExpect } from "./assertables.ts";
 import { createFilter, createFilterOr } from "./filterables.ts";
@@ -10,13 +10,13 @@ import {
   isTagged,
   isTaggedWith,
   TaggedWithValue,
-  TaggedWithValueFactory
+  TaggedWithValueFactory,
 } from "./tagged-type.ts";
 import * as tg from "./typeguards.ts";
 import {
   createUnwrap,
   createUnwrapOr,
-  createUnwrapOrElse
+  createUnwrapOrElse,
 } from "./unwrappables.ts";
 
 //#region types

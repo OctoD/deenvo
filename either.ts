@@ -7,13 +7,13 @@ import {
   createTaggedWithValue,
   isTagged,
   isTaggedWith,
-  TaggedWithValue
+  TaggedWithValue,
 } from "./tagged-type.ts";
 import { anyof, combine, haskeyoftype, Typeguard } from "./typeguards.ts";
 import {
   createUnwrap,
   createUnwrapOr,
-  createUnwrapOrElse
+  createUnwrapOrElse,
 } from "./unwrappables.ts";
 
 //#region types

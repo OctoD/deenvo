@@ -74,7 +74,10 @@ const hasjusttag = isTaggedWith(JUSTTAG) as Typeguard<Just>;
 /**
  * 
  */
-export const isMaybe = combine<Maybe>(isTagged, anyof(hasnothingtag, hasjusttag));
+export const isMaybe = combine<Maybe>(
+  isTagged,
+  anyof(hasnothingtag, hasjusttag),
+);
 /**
  * 
  */

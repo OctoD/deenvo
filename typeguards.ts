@@ -136,7 +136,12 @@ export const haslengthof = (length: number) =>
 
 //#region typeguards factories
 
-export type TypeguardsFromStruct<T> = { [key in keyof T]: T[key] extends (number | string | boolean | null | undefined | unknown[]) ? Typeguard<T[key]> : TypeguardsFromStruct<T[key]> };
+export type TypeguardsFromStruct<T> = {
+  [key in keyof T]: T[key] extends
+    (number | string | boolean | null | undefined | unknown[])
+    ? Typeguard<T[key]>
+    : TypeguardsFromStruct<T[key]>;
+};
 
 /**
  *
@@ -144,7 +149,9 @@ export type TypeguardsFromStruct<T> = { [key in keyof T]: T[key] extends (number
  * @template TG
  * @param {TG} typeguard
  */
-export const createStructOf = <TG extends any>(typeguard: TypeguardsFromStruct<TG>) =>
+export const createStructOf = <TG extends any>(
+  typeguard: TypeguardsFromStruct<TG>,
+) =>
   (value: unknown): value is TypeguardsStruct<TG> => {
     if (isindexable(typeguard) && isindexable(value)) {
       const keys = Object.keys(typeguard);
@@ -166,7 +173,10 @@ export const createStructOf = <TG extends any>(typeguard: TypeguardsFromStruct<T
 
           return false;
         } else {
-          if (isfunction((typeguard as any)[key]) && (typeguard as any)[key](currentvalue)) {
+          if (
+            isfunction((typeguard as any)[key]) &&
+            (typeguard as any)[key](currentvalue)
+          ) {
             continue;
           }
 
@@ -266,7 +276,8 @@ export const isarrayof = <T>(typeguard: Typeguard<T>) =>
  * @template T
  * @param {Typeguard<T>} typeguard
  */
-export const nullable = <T>(typeguard: Typeguard<T>) => anyof<T | null>(isnull, typeguard);
+export const nullable = <T>(typeguard: Typeguard<T>) =>
+  anyof<T | null>(isnull, typeguard);
 
 /**
  * Makes a Typeguard<T> optional
@@ -282,4 +293,5 @@ export const nullable = <T>(typeguard: Typeguard<T>) => anyof<T | null>(isnull, 
  * @template T
  * @param {Typeguard<T>} typeguard
  */
-export const optional = <T>(typeguard: Typeguard<T>) => anyof<T | undefined>(isundefined, typeguard);
+export const optional = <T>(typeguard: Typeguard<T>) =>
+  anyof<T | undefined>(isundefined, typeguard);

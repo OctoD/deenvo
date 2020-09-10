@@ -59,19 +59,21 @@ export const createTaggedWithValueFactory = <T extends string>(
   <K>(arg: K) =>
     createTaggedWithValue(arg, tagname) as unknown as TaggedWithValue<K, T>;
 
-const _isTagged = combine(
+const _isTagged = combine<Tagged<any>>(
   hastag,
   haskeyoftype("__tag", isstring),
-) as Typeguard<Tagged<any>>;
+);
 
 /**
  * 
  * 
  * @type {Typeguard<TaggedWithValue<any, any>>}
  */
-export const isTagged = combine(isindexable, hasvalue, _isTagged) as Typeguard<
-  TaggedWithValue<any, any>
->;
+export const isTagged = combine<TaggedWithValue<any, any>>(
+  isindexable,
+  hasvalue,
+  _isTagged,
+);
 
 /**
  *
@@ -80,12 +82,12 @@ export const isTagged = combine(isindexable, hasvalue, _isTagged) as Typeguard<
  * @param {Tag} tag
  */
 export const isTaggedWith = <Tag extends string>(tag: Tag) =>
-  combine(
+  combine<TaggedWithValue<any, Tag>>(
     isindexable,
     hasvalue,
     _isTagged,
     haskeyWithValue("__tag", tag),
-  ) as Typeguard<TaggedWithValue<any, Tag>>;
+  );
 
 /**
  *
@@ -99,10 +101,10 @@ export const isTaggedWithValueOf = <Tag extends string, T>(
   tag: Tag,
   typeguard: Typeguard<T>,
 ) =>
-  combine(
+  combine<TaggedWithValue<T, Tag>>(
     isindexable,
     hasvalue,
     _isTagged,
     haskeyWithValue("__tag", tag),
     haskeyoftype("value", typeguard),
-  ) as Typeguard<TaggedWithValue<T, Tag>>;
+  );
