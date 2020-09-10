@@ -179,7 +179,7 @@ export const createStructOf = <TG extends any>(
     if (!isindexable(typeguard) || !isindexable(value)) {
       return false;
     }
-    
+
     const keys = Object.keys(typeguard);
 
     for (let i = 0; i < keys.length; i++) {
@@ -191,7 +191,8 @@ export const createStructOf = <TG extends any>(
       }
 
       const currenttg = typeguard[key as keyof typeof typeguard];
-      const case1 = isindexable(currenttg) && createStructOf(currenttg as any)(currentvalue);
+      const case1 = isindexable(currenttg) &&
+        createStructOf(currenttg as any)(currentvalue);
       const case2 = isfunction(currenttg) && currenttg(currentvalue);
 
       if (case1 || case2) {
@@ -210,14 +211,16 @@ export const createStructOf = <TG extends any>(
  * @template TG
  * @param {...TG} typeguards
  */
-export const createTupleOf = <TG extends Typeguard<any>[]>(...typeguards: TG) => {
+export const createTupleOf = <TG extends Typeguard<any>[]>(
+  ...typeguards: TG
+) => {
   const tlength = haslengthof(typeguards.length);
-  
+
   return (value: unknown): value is TypegardsTuple<TG> =>
     isarray(value) &&
     tlength(value) &&
     value.every((arg, index) => typeguards[index] && typeguards[index](arg));
-}
+};
 
 //#endregion
 
