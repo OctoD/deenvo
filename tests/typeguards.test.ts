@@ -109,10 +109,12 @@ Deno.test('typeguards::isarrayof', () => {
 
   assert(isFoo(new Foo('', 100)))
   assert(isFoo(new Foo('', 100, 'hello')))
+  assert(!isFoo(new Foo('', 100, 123 as any)))
   assert(isarrayOfFoo([]));
   assert(isarrayofNullablesFoo([]));
   assert(!isarrayOfFoo(foo('', 100)))
   assert(isarrayOfFoo([foo('foo', 22), foo('bar', 33), foo('baz', 44, 'pippo')]))
   assert(isarrayOfFoo([foo('foo', 22), foo('bar', 33), foo('baz', 44)]))
+  assert(!isarrayOfFoo([foo('foo', 22), foo('bar', 33), foo('baz', 44, 123 as any)]))
   assert(isarrayofNullablesFoo([foo('foo', 22), null, foo('baz', 44)]))
 });

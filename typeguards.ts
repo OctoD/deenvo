@@ -157,7 +157,7 @@ export const createStructOf = <TG extends any>(typeguard: TypeguardsFromStruct<T
           return false;
         }
 
-        if (isindexable(key)) {
+        if (isindexable((typeguard as any)[key])) {
           const tg = createStructOf((typeguard as any)[key]);
 
           if (tg(currentvalue)) {
@@ -165,8 +165,8 @@ export const createStructOf = <TG extends any>(typeguard: TypeguardsFromStruct<T
           }
 
           return false;
-        } else if (isfunction(currentvalue)) {
-          if ((typeguard as any)[key](currentvalue)) {
+        } else {
+          if (isfunction((typeguard as any)[key]) && (typeguard as any)[key](currentvalue)) {
             continue;
           }
 
