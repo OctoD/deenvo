@@ -31,7 +31,7 @@ const hasvalue = haskey("value");
  * 
  * @example
  * 
- * createTagged('hello world', 'foobarbaz'); // Tagged<'hello world', 'foobarbaz'>;
+ * tagged('hello world', 'foobarbaz'); // Tagged<'hello world', 'foobarbaz'>;
  *
  * @template T
  * @template Tagname
@@ -39,7 +39,7 @@ const hasvalue = haskey("value");
  * @param {Tagname} tagname
  * @returns {Tagged<T, Tagname>}
  */
-export const createTagged = <T, Tagname extends string>(
+export const tagged = <T, Tagname extends string>(
   value: T,
   tagname: Tagname,
 ): Tagged<T, Tagname> => ({ __tag: tagname, value });
@@ -48,7 +48,7 @@ export const createTagged = <T, Tagname extends string>(
  * Creates a factory which returns a `Tagged<K, T>`
  * 
  * @example
- * const mytype = createTaggedFactory('foo');
+ * const mytype = taggedFactory('foo');
  * 
  * mytype(10) // Tagged<10, 'foo'>
  * 
@@ -56,10 +56,10 @@ export const createTagged = <T, Tagname extends string>(
  * @param {T} tagname
  * @returns {TaggedFactory<T>}
  */
-export const createTaggedFactory = <T extends string>(
+export const taggedFactory = <T extends string>(
   tagname: T,
 ): TaggedFactory<T> =>
-  <K>(arg: K) => createTagged(arg, tagname) as unknown as Tagged<K, T>;
+  <K>(arg: K) => tagged(arg, tagname) as unknown as Tagged<K, T>;
 
 const _isTagged = combine<Tagged<unknown, string>>(
   hastag,

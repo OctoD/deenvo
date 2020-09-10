@@ -4,7 +4,7 @@ import { createFilter, createFilterOr } from "./filterables.ts";
 import { createfold } from "./foldables.ts";
 import { Predicate } from "./predicate.ts";
 import {
-  createTagged,
+  tagged,
   isTagged,
   isTaggedWith,
   Tagged
@@ -80,14 +80,14 @@ export const isNothing = combine<Nothing>(isTagged, hasnothingtag);
 /**
  * 
  */
-export const nothing = (): Nothing => createTagged(undefined, NOTHINGTAG);
+export const nothing = (): Nothing => tagged(undefined, NOTHINGTAG);
 
 /**
  * 
  */
 export const just = <T>(value: T) =>
   check(!!value, "Just value must be truthy")(
-    createTagged(value, JUSTTAG),
+    tagged(value, JUSTTAG),
   );
 
 /**

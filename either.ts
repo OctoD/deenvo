@@ -3,7 +3,7 @@ import { createfold, createSwap } from "./foldables.ts";
 import { createMap, createMapOr, createMapOrElse } from "./mappables.ts";
 import { Predicate } from "./predicate.ts";
 import {
-  createTagged,
+  tagged,
   isTagged,
   isTaggedWith,
   Tagged,
@@ -137,12 +137,12 @@ export const isRightOf = <T>(typeguard: Typeguard<T>) =>
 /**
  * Creates a Left<T> type
  */
-export const left = <T>(value: T): Left<T> => createTagged(value, LEFTTAG);
+export const left = <T>(value: T): Left<T> => tagged(value, LEFTTAG);
 
 /**
  * Creates a Right<T> type
  */
-export const right = <T>(value: T): Right<T> => createTagged(value, RIGHTTAG);
+export const right = <T>(value: T): Right<T> => tagged(value, RIGHTTAG);
 
 //#endregion
 

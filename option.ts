@@ -5,7 +5,7 @@ import { createExpect } from "./assertables.ts";
 import { createFilter, createFilterOr } from "./filterables.ts";
 import { createMap, createMapOr, createMapOrElse } from "./mappables.ts";
 import {
-  createTagged,
+  tagged,
   isTagged,
   isTaggedWith,
   Tagged,
@@ -113,7 +113,7 @@ export const unexpect = createExpect<Option>(isNone);
 /**
  * 
  */
-export const none = (): None => createTagged(void 0, NONETAG);
+export const none = (): None => tagged(void 0, NONETAG);
 
 /**
  * 
@@ -122,7 +122,7 @@ export const some = <T>(value: T): Some<T> =>
   check(
     !typeguardsTs.isnullOrUndefined(value),
     "some value cannot be undefined nor null",
-  )(createTagged(value, SOMETAG));
+  )(tagged(value, SOMETAG));
 
 /**
  * 

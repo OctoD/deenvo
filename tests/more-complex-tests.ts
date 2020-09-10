@@ -18,7 +18,7 @@ import {
 } from "../mod.ts";
 import { Option } from "../option.ts";
 import {
-  createTaggedFactory,
+  taggedFactory,
   Tagged,
 } from "../tagged-type.ts";
 
@@ -160,7 +160,7 @@ Deno.test("example 003 : creating a doubly linked list", () => {
 Deno.test("example 004 : creates a state manager", () => {
   const statetag = "state";
   type statetag = typeof statetag;
-  const statemanager = createTaggedFactory(statetag);
+  const statemanager = taggedFactory(statetag);
   const createmutate = <T extends Tagged<any, statetag>>(state: T) =>
     (key: keyof T["value"], value: T["value"][typeof key]) =>
       Object.assign(state.value, { [key]: value });

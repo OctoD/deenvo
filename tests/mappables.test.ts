@@ -3,11 +3,11 @@ import {
 } from "https://deno.land/std/testing/asserts.ts";
 import { createMap, createMapOr, createMapOrElse } from "../mappables.ts";
 import {
-  createTaggedFactory,
+  taggedFactory,
   isTagged,
 } from "../tagged-type.ts";
 
-const tagged = createTaggedFactory("testtag");
+const tagged = taggedFactory("testtag");
 const map = createMap(isTagged, tagged);
 const mapOr = createMapOr(isTagged, tagged);
 const mapOrElse = createMapOrElse(isTagged, tagged);

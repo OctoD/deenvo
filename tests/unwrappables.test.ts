@@ -3,7 +3,7 @@ import {
   assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
 import {
-  createTaggedFactory,
+  taggedFactory,
   isTagged,
 } from "../tagged-type.ts";
 import {
@@ -12,7 +12,7 @@ import {
   createUnwrapOrElse,
 } from "../unwrappables.ts";
 
-const testtype = createTaggedFactory("unwrappablestest");
+const testtype = taggedFactory("unwrappablestest");
 const typechecker = (arg: unknown) =>
   isTagged(arg) && typeof arg.value === "number";
 const unwrap = createUnwrap(typechecker, "argument is wrong");

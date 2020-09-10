@@ -4,11 +4,11 @@ import {
 } from "https://deno.land/std/testing/asserts.ts";
 import { createExpect } from "../assertables.ts";
 import {
-  createTaggedFactory,
+  taggedFactory,
   isTagged,
 } from "../tagged-type.ts";
 
-const testtype = createTaggedFactory("assertabletest");
+const testtype = taggedFactory("assertabletest");
 const expect = createExpect((arg) =>
   isTagged(arg) && typeof arg.value === "string"
 );

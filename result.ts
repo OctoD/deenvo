@@ -5,7 +5,7 @@ import { createExpect } from "./assertables.ts";
 import { createFilter, createFilterOr } from "./filterables.ts";
 import { createMap, createMapOr, createMapOrElse } from "./mappables.ts";
 import {
-  createTagged,
+  tagged,
   isTagged,
   isTaggedWith,
   Tagged,
@@ -98,7 +98,7 @@ export const isOk = tg.combine(isTagged, hasoktag) as tg.Typeguard<Ok>;
  * 
  */
 export const err = (message: string | Error): Err =>
-  createTagged(
+  tagged(
     message instanceof Error ? message : new Error(message),
     ERRTAG,
   );
@@ -107,7 +107,7 @@ export const err = (message: string | Error): Err =>
  * 
  */
 export const ok = <T>(value: T): Ok<T> =>
-  createTagged(
+  tagged(
     check(!tg.iserror(value), "An error cannot be a value of Ok")(value),
     OKTAG,
   );
