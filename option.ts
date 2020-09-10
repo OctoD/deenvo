@@ -52,11 +52,16 @@ declare module "./applicative.ts" {
 
 const hasnonetag = isTaggedWith(NONETAG) as typeguardsTs.Typeguard<None>;
 const hassometag = isTaggedWith(SOMETAG) as typeguardsTs.Typeguard<Some>;
-const hasoptiontag = typeguardsTs.or<Option>(hasnonetag, hassometag);
+const hasoptiontag = typeguardsTs.anyof<Option>(hasnonetag, hassometag);
 
 export const isOption = typeguardsTs.combine<Option>(isTagged, hasoptiontag);
 export const isNone = typeguardsTs.combine<None>(isTagged, hasnonetag);
 export const isSome = typeguardsTs.combine<Some>(isTagged, hassometag);
+export const isOptionOf = <T>(typeguard: typeguardsTs.Typeguard<T>) =>
+  typeguardsTs.combine<Option<T>>(
+    isOption,
+    typeguardsTs.haskeyoftype("value", typeguard),
+  );
 
 //#endregion
 

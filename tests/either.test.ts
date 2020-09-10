@@ -9,8 +9,11 @@ import {
   fold,
   frompredicate,
   isEither,
+  isEitherOf,
   isLeft,
+  isLeftOf,
   isRight,
+  isRightOf,
   left,
   mapLeft,
   mapLeftOrElse,
@@ -26,6 +29,7 @@ import {
   unwrapRightOr,
   unwrapRightOrElse,
 } from "../either.ts";
+import { isnumber, isstring } from "../typeguards.ts";
 
 const fallback = (arg: number) => (): number => arg;
 
@@ -39,6 +43,15 @@ Deno.test("either::typeguards", () => {
   assert(!isEither(123));
   assert(!isRight(123));
   assert(!isLeft(123));
+
+  assert(isEitherOf(isstring)(right("hello")));
+  assert(isEitherOf(isstring)(left("hello")));
+  assert(isLeftOf(isstring)(left("hello")));
+  assert(isRightOf(isstring)(right("hello")));
+  assert(!isLeftOf(isstring)(right("hello")));
+  assert(!isRightOf(isstring)(left("hello")));
+  assert(!isLeftOf(isnumber)(right("hello")));
+  assert(!isRightOf(isnumber)(left("hello")));
 });
 
 Deno.test("either::filterables", () => {

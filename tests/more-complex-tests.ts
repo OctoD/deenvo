@@ -12,7 +12,7 @@ import {
   isnumber,
   isstring,
   option,
-  or,
+  anyof,
   predicate,
   result,
 } from "../mod.ts";
@@ -77,7 +77,7 @@ Deno.test("example 001 : getting first and last user in mixed array", () => {
 Deno.test("example 002 : validating a matrix", () => {
   const iszero = (arg: unknown): arg is 0 => arg === 0;
   const isone = (arg: unknown): arg is 1 => arg === 1;
-  const isbit = or<0 | 1>(iszero, isone);
+  const isbit = anyof<0 | 1>(iszero, isone);
   const ismatrix = isarrayof(isarrayof(isbit));
   const matrix = [
     [0, 1, 0],

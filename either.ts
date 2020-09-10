@@ -7,13 +7,13 @@ import {
   createTaggedWithValue,
   isTagged,
   isTaggedWith,
-  TaggedWithValue,
+  TaggedWithValue
 } from "./tagged-type.ts";
-import { combine, or, Typeguard } from "./typeguards.ts";
+import { anyof, combine, haskeyoftype, Typeguard } from "./typeguards.ts";
 import {
   createUnwrap,
   createUnwrapOr,
-  createUnwrapOrElse,
+  createUnwrapOrElse
 } from "./unwrappables.ts";
 
 //#region types
@@ -48,11 +48,17 @@ declare module "./applicative.ts" {
 
 const hasleftag = isTaggedWith(LEFTTAG) as Typeguard<Left>;
 const hasrighttag = isTaggedWith(RIGHTTAG) as Typeguard<Right>;
-const haseithertag = or<Left | Right>(hasleftag, hasrighttag);
+const haseithertag = anyof<Left | Right>(hasleftag, hasrighttag);
 
 export const isEither = combine<Either>(isTagged, haseithertag);
 export const isLeft = combine<Left>(isTagged, hasleftag);
 export const isRight = combine<Right>(isTagged, hasrighttag);
+export const isEitherOf = <T>(typeguard: Typeguard<T>) =>
+  combine(isEither, haskeyoftype("value", typeguard));
+export const isLeftOf = <T>(typeguard: Typeguard<T>) =>
+  combine(isLeft, haskeyoftype("value", typeguard));
+export const isRightOf = <T>(typeguard: Typeguard<T>) =>
+  combine(isRight, haskeyoftype("value", typeguard));
 
 //#endregion
 

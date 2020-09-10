@@ -9,7 +9,7 @@ import {
   isTaggedWith,
   TaggedWithValue,
 } from "./tagged-type.ts";
-import { combine, or, Typeguard } from "./typeguards.ts";
+import { combine, anyof, Typeguard } from "./typeguards.ts";
 import {
   createUnwrap,
   createUnwrapOr,
@@ -46,9 +46,8 @@ declare module "./applicative.ts" {
 
 const hasnothingtag = isTaggedWith(NOTHINGTAG) as Typeguard<Nothing>;
 const hasjusttag = isTaggedWith(JUSTTAG) as Typeguard<Just>;
-const hasmaybetag = or(hasnothingtag, hasjusttag) as Typeguard<Maybe>;
 
-export const isMaybe = combine<Maybe>(isTagged, hasmaybetag);
+export const isMaybe = combine<Maybe>(isTagged, anyof(hasnothingtag, hasjusttag));
 export const isJust = combine<Just>(isTagged, hasjusttag);
 export const isNothing = combine<Nothing>(isTagged, hasnothingtag);
 

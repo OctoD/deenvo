@@ -209,7 +209,7 @@ export const combine = <T>(...args: Typeguard<any>[]): Typeguard<T> =>
  * @param {...Typeguard<unknown>[]} predicates
  * @returns {Typeguard<T>}
  */
-export const or = <T>(
+export const anyof = <T>(
   ...predicates: Typeguard<unknown>[]
 ): Typeguard<T> => predicate.or.apply(null, predicates) as Typeguard<T>;
 
