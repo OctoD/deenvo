@@ -4,6 +4,7 @@ import "./tests/cast.test.ts";
 import "./tests/conditionals.test.ts";
 import "./tests/either.test.ts";
 import "./tests/foldable.test.ts";
+import "./tests/insertables.test.ts";
 import "./tests/mappables.test.ts";
 import "./tests/maybe.test.ts";
 import "./tests/option.test.ts";
