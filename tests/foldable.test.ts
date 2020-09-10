@@ -12,8 +12,8 @@ Deno.test("foldables::" + foldables.createfold.name, () => {
     taggedtype.isTagged(arg) && arg.__tag === "fail"
   );
   const test1 = fn((arg: number) => arg + 10, (input: string) => input.length);
-  const successfactory = taggedtype.createTaggedWithValueFactory("test");
-  const failfactory = taggedtype.createTaggedWithValueFactory("fail");
+  const successfactory = taggedtype.createTaggedFactory("test");
+  const failfactory = taggedtype.createTaggedFactory("fail");
 
   assertEquals(test1(failfactory(100)), 110, "");
   assertNotEquals(test1(failfactory("100")), 110, "");

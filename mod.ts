@@ -10,7 +10,6 @@ import * as assertables from "./assertables.ts";
 import * as either from "./either.ts";
 import * as filterables from "./filterables.ts";
 import * as foldables from "./foldables.ts";
-import * as insertables from "./insertables.ts";
 import * as mappables from "./mappables.ts";
 import * as maybe from "./maybe.ts";
 import * as option from "./option.ts";
@@ -23,7 +22,6 @@ export {
   either,
   filterables,
   foldables,
-  insertables,
   mappables,
   maybe,
   option,

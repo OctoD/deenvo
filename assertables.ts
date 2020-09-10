@@ -1,6 +1,8 @@
 import { check } from "./applicative.ts";
 import { Predicate } from "./predicate.ts";
 
+export type Expect<T> = ((errormessage: string) => (arg: T) => T);
+
 /**
  * Creates an expect function. This function checks if a given argument satisfies the given predicate.
  * If the condition is not satisfied, it throws
@@ -22,10 +24,10 @@ import { Predicate } from "./predicate.ts";
  *
  * @template T
  * @param {Predicate<T>} predicate
- * @returns {((errormessage: string) => (arg: T) => T)}
+ * @returns {Expect<T>}
  */
 export const createExpect = <T>(
   predicate: Predicate<T>,
-) =>
+): Expect<T> =>
   (errormessage: string) =>
     (arg: T): T => check(predicate(arg), errormessage)(arg) as T;

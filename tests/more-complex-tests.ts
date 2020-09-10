@@ -18,8 +18,8 @@ import {
 } from "../mod.ts";
 import { Option } from "../option.ts";
 import {
-  createTaggedWithValueFactory,
-  TaggedWithValue,
+  createTaggedFactory,
+  Tagged,
 } from "../tagged-type.ts";
 
 Deno.test("example 001 : getting first and last user in mixed array", () => {
@@ -160,11 +160,11 @@ Deno.test("example 003 : creating a doubly linked list", () => {
 Deno.test("example 004 : creates a state manager", () => {
   const statetag = "state";
   type statetag = typeof statetag;
-  const statemanager = createTaggedWithValueFactory(statetag);
-  const createmutate = <T extends TaggedWithValue<any, statetag>>(state: T) =>
+  const statemanager = createTaggedFactory(statetag);
+  const createmutate = <T extends Tagged<any, statetag>>(state: T) =>
     (key: keyof T["value"], value: T["value"][typeof key]) =>
       Object.assign(state.value, { [key]: value });
-  const createreset = <T extends TaggedWithValue<any, statetag>>(state: T) => {
+  const createreset = <T extends Tagged<any, statetag>>(state: T) => {
     const initial = statemanager({ ...state.value });
     return () => Object.assign(state.value, initial.value);
   };

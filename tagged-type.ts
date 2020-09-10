@@ -9,67 +9,69 @@ import {
 } from "./typeguards.ts";
 
 /**
- * 
+ * A `TaggedType` with a value `T`
  */
-export type Tagged<Tagname extends string> = { readonly __tag: Tagname };
+export type Tagged<T, Tagname extends string> = {
+  readonly __tag: Tagname;
+  readonly value: T;
+};
 
 /**
- * 
+ * A `TaggedType<T, Tagname>` factory.
  */
-export type TaggedWithValue<T, Tagname extends string> =
-  & { readonly value: T }
-  & Tagged<Tagname>;
-
-/**
- * 
- */
-export type TaggedFactory<Tagname extends string> = () => Tagged<Tagname>;
-
-/**
- * 
- */
-export type TaggedWithValueFactory<Tagname extends string> = <T>(
+export type TaggedFactory<Tagname extends string> = <T>(
   arg: T,
-) => TaggedWithValue<T, Tagname>;
+) => Tagged<T, Tagname>;
 
 const hastag = haskey("__tag");
 const hasvalue = haskey("value");
 
 /**
- *
+ * Creates a TaggedType<T, Tagname>.
+ * 
+ * @example
+ * 
+ * createTagged('hello world', 'foobarbaz'); // Tagged<'hello world', 'foobarbaz'>;
  *
  * @template T
  * @template Tagname
  * @param {T} value
  * @param {Tagname} tagname
- * @returns {TaggedWithValue<T, Tagname>}
+ * @returns {Tagged<T, Tagname>}
  */
-export const createTaggedWithValue = <T, Tagname extends string>(
+export const createTagged = <T, Tagname extends string>(
   value: T,
   tagname: Tagname,
-): TaggedWithValue<T, Tagname> => ({ __tag: tagname, value });
+): Tagged<T, Tagname> => ({ __tag: tagname, value });
 
 /**
+ * Creates a factory which returns a `Tagged<K, T>`
  * 
- * @param tagname 
+ * @example
+ * const mytype = createTaggedFactory('foo');
+ * 
+ * mytype(10) // Tagged<10, 'foo'>
+ * 
+ * @template T
+ * @param {T} tagname
+ * @returns {TaggedFactory<T>}
  */
-export const createTaggedWithValueFactory = <T extends string>(
+export const createTaggedFactory = <T extends string>(
   tagname: T,
-): TaggedWithValueFactory<T> =>
-  <K>(arg: K) =>
-    createTaggedWithValue(arg, tagname) as unknown as TaggedWithValue<K, T>;
+): TaggedFactory<T> =>
+  <K>(arg: K) => createTagged(arg, tagname) as unknown as Tagged<K, T>;
 
-const _isTagged = combine<Tagged<any>>(
+const _isTagged = combine<Tagged<unknown, string>>(
   hastag,
   haskeyoftype("__tag", isstring),
 );
 
 /**
+ * Checks if a variable is a Tagged<unknown, string>
  * 
- * 
- * @type {Typeguard<TaggedWithValue<any, any>>}
+ * @type {Typeguard<Tagged<unknown, string>>}
  */
-export const isTagged = combine<TaggedWithValue<any, any>>(
+export const isTagged = combine<Tagged<unknown, string>>(
   isindexable,
   hasvalue,
   _isTagged,
@@ -82,7 +84,7 @@ export const isTagged = combine<TaggedWithValue<any, any>>(
  * @param {Tag} tag
  */
 export const isTaggedWith = <Tag extends string>(tag: Tag) =>
-  combine<TaggedWithValue<any, Tag>>(
+  combine<Tagged<unknown, Tag>>(
     isindexable,
     hasvalue,
     _isTagged,
@@ -97,11 +99,11 @@ export const isTaggedWith = <Tag extends string>(tag: Tag) =>
  * @param {Tag} tag
  * @param {Typeguard<T>} typeguard
  */
-export const isTaggedWithValueOf = <Tag extends string, T>(
+export const isTaggedOf = <Tag extends string, T>(
   tag: Tag,
   typeguard: Typeguard<T>,
 ) =>
-  combine<TaggedWithValue<T, Tag>>(
+  combine<Tagged<T, Tag>>(
     isindexable,
     hasvalue,
     _isTagged,

@@ -3,10 +3,19 @@ import * as predicate from "./predicate.ts";
 
 //#region types
 
+/**
+ * A typeguard
+ */
 export type Typeguard<IsOutput> = (arg: unknown) => arg is IsOutput;
 
+/**
+ * Represents a plain object
+ */
 export type IndexableObject<T = unknown> = { [index: string]: T };
 
+/**
+ * Represents an object with the `length` property
+ */
 export type WithLength = { length: number };
 
 export type TypeguardsStruct<T> = {
@@ -23,47 +32,163 @@ export type TypegardsTuple<T extends Typeguard<any>[]> = {
 
 //#region primitives
 
+/**
+ * Checks if a value is an array
+ * 
+ * @example
+ * isarray(10)  // false
+ * isarray('a') // false
+ * isarray(!0)  // false
+ * isarray([])  // true
+ */
 export const isarray = ((arg) => Array.isArray(arg)) as Typeguard<unknown[]>;
 
+/**
+ * Checks if a value is a bigint
+ * 
+ * @example
+ * isbigint(10)  // false
+ * isbigint('a') // false
+ * isbigint(!0)  // false
+ * isbigint(10n) // true
+ */
 export const isbigint = ((arg) => typeof arg === "bigint") as Typeguard<bigint>;
 
+/**
+ * Checks if a value is a boolean
+ * 
+ * @example
+ * isboolean(10)  // false
+ * isboolean('a') // false
+ * isboolean(!0)  // true
+ * isboolean(10n) // false
+ */
 export const isboolean = ((arg) => typeof arg === "boolean") as Typeguard<
   boolean
 >;
 
+/**
+ * Checks if a value is not undefined
+ * 
+ * @example
+ * isdefined(undefined)   // false
+ * isdefined(10)          // true
+ * isdefined('a')         // true
+ * isdefined(!0)          // true
+ * isdefined(10n)         // true
+ */
 export const isdefined = ((arg) => typeof arg !== "undefined") as Typeguard<
   object
 >;
 
+/**
+ * Checks if a value is a function
+ * 
+ * @example
+ * isfunction(undefined)   // false
+ * isfunction(10)          // false
+ * isfunction('a')         // false
+ * isfunction(!0)          // false
+ * isfunction(() => void 0)// true
+ */
 export const isfunction = ((arg) => typeof arg === "function") as Typeguard<
   FnBase
 >;
 
+/**
+ * Checks if a value is a number
+ * 
+ * @example
+ * isnumber(10)  // true
+ * isnumber('a') // false
+ * isnumber(!0)  // false
+ * isnumber(10n) // false
+ */
 export const isnumber = ((arg) => typeof arg === "number") as Typeguard<number>;
 
+/**
+ * Checks if a value is an object
+ * 
+ * @example
+ * isobject(10)   // false
+ * isobject('a')  // false
+ * isobject({})   // true
+ * isobject(null) // true
+ * isobject([])   // true
+ */
 export const isobject = ((arg) => typeof arg === "object") as Typeguard<object>;
 
+/**
+ * Checks if a value is a string
+ * 
+ * @example
+ * isstring(10)   // false
+ * isstring('a')  // true
+ * isstring({})   // false
+ * isstring(null) // false
+ * isstring([])   // false
+ */
 export const isstring = ((arg) => typeof arg === "string") as Typeguard<string>;
 
+/**
+ * Checks if a value is undefined
+ * 
+ * @example
+ * isundefined(10)          // false
+ * isundefined('a')         // false
+ * isundefined({})          // false
+ * isundefined(null)        // false
+ * isundefined(undefined)   // true
+ */
 export const isundefined = ((arg) => typeof arg === "undefined") as Typeguard<
   undefined
 >;
 
+/**
+ * Checks if a value is null
+ * 
+ * @example
+ * isnull(10)          // false
+ * isnull('a')         // false
+ * isnull({})          // false
+ * isnull(null)        // true
+ * isnull(undefined)   // false
+ */
 export const isnull = ((arg) => arg === null) as Typeguard<null>;
 
+/**
+ * Checks if a value is not null
+ * 
+ * @example
+ * isnotnull(10)          // true
+ * isnotnull('a')         // true
+ * isnotnull({})          // true
+ * isnotnull(null)        // false
+ * isnotnull(undefined)   // true
+ */
 export const isnotnull = ((arg) => arg !== null) as Typeguard<object>;
 
 //#endregion
 
 //#region derived from isobject
 
+/**
+ * Checks if a value is an object (so that the `key` in can be used)
+ * 
+ * @example
+ * isindexable(10)          // false
+ * isindexable('a')         // false
+ * isindexable({})          // true
+ * isindexable(null)        // false
+ * isindexable(undefined)   // false
+ */
 export const isindexable =
   ((arg) => isobject(arg) && arg !== null) as Typeguard<
     { [index: string]: unknown }
   >;
 
 /**
- *
+ * Checks if a value is an Error
  *
  * @param {unknown} arg
  * @returns {arg is Error}
@@ -75,7 +200,7 @@ export const iserror = (arg: unknown): arg is Error => arg instanceof Error;
 //#region indexables
 
 /**
- *
+ * Checks if a value is indexable and has a key
  *
  * @template Key
  * @param {Key} key
@@ -86,7 +211,11 @@ export const haskey = <Key extends (string | number)>(
   (arg: unknown): arg is Record<Key, unknown> => isindexable(arg) && key in arg;
 
 /**
- *
+ * Checks if a value is indexable, has a key and that key has a given type
+ * 
+ * @example
+ * haskeyoftype('foo', isstring)({ foo: 100 }) // false
+ * haskeyoftype('foo', isstring)({ foo: '1' }) // true
  *
  * @template Key
  * @template T
@@ -101,7 +230,11 @@ export const haskeyoftype = <Key extends (string | number), T>(
     isindexable(arg) && key in arg && typeguard(arg[key]);
 
 /**
- *
+ * Checks if a value is indexable, has a key and that key has a precise value
+ * 
+ * @example
+ * haskeyWithValue('foo', 100)({ foo: 100 }) // true
+ * haskeyWithValue('foo', 100)({ foo: '1' }) // false
  *
  * @template Key
  * @template Value
@@ -116,18 +249,30 @@ export const haskeyWithValue = <Key extends (string | number), Value>(
     isindexable(arg) && key in arg && arg[key] === value;
 
 /**
+ * Checks if a value is indexable and has the 'length' key
  *
- *
+ * @example
+ * haslength([])              // true
+ * haslength({})              // false
+ * haslength({ length: 10 })  // true
+ * 
  * @param {unknown} arg
  * @returns {arg is WithLength}
  */
-export const haslength = (arg: unknown): arg is WithLength =>
-  !isnullOrUndefined(arg) && haskey("length")(arg);
+export const haslength = haskey("length") as Typeguard<WithLength>;
 
 /**
- *
- *
- * @param {number} length
+ * Checks if a value is indexable, has the 'length' key and that the length is equal to a given one
+ * 
+ * @example
+ * const test = haslengthof(5)
+ * 
+ * test([1, 2, 3])       // false
+ * test({})              // false
+ * test({ length: 10 })  // true
+ * 
+ * @param {unknown} arg
+ * @returns {arg is WithLength}
  */
 export const haslengthof = (length: number) =>
   (arg: unknown): arg is WithLength => haslength(arg) && arg.length === length;

@@ -32,7 +32,7 @@ export const and = <T>(...predicates: Predicate<T>[]): Predicate<T> =>
  * 
  * @example
  * const iseven = (arg: number) => arg % 2 === 0;
- * const isodd  = (arg: number) => arg % 2 !== 0;
+ * const isodd  = revers(iseven);
  * const check1 = fromvalue(1);
  * const check2 = fromvalue(2);
  * 
@@ -48,7 +48,7 @@ export const fromvalue = <T>(value: T) =>
   (predicate: Predicate<T>) => predicate(value);
 
 /**
- * Checks if every value T passes the given predicate
+ * Returns a function which checks if every value T passes a given predicate
  * 
  * @example
  * const test1 = fromvalues(1, 2, 3, 4, 5);
@@ -113,7 +113,7 @@ export const or = <T>(
 ): Predicate<T> => (argument) => predicates.some(fromvalue(argument));
 
 /**
- * Reverses the returning value of a predicate.
+ * Reverses the result of a predicate.
  * 
  * @example
  * const iseven = (arg: number) => arg % 2 === 0;

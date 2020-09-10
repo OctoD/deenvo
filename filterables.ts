@@ -1,5 +1,5 @@
 import { Predicate } from "./predicate.ts";
-import { TaggedWithValue, TaggedWithValueFactory } from "./tagged-type.ts";
+import { Tagged, TaggedFactory } from "./tagged-type.ts";
 
 /**
  *
@@ -7,19 +7,19 @@ import { TaggedWithValue, TaggedWithValueFactory } from "./tagged-type.ts";
  * @template Arg
  * @template Tagname
  * @param {Predicate<Arg>} typeguard
- * @param {TaggedWithValueFactory<Tagname>} factory
- * @param {<X>(...args: any[]) => TaggedWithValue<X, Tagname>} failfactory
+ * @param {TaggedFactory<Tagname>} factory
+ * @param {<X>(...args: any[]) => Tagged<X, Tagname>} failfactory
  */
 export const createFilter = <
-  Arg extends TaggedWithValue<any, Tagname>,
+  Arg extends Tagged<any, Tagname>,
   Tagname extends string,
 >(
   typeguard: Predicate<Arg>,
-  factory: TaggedWithValueFactory<Tagname>,
-  failfactory: <X>(...args: any[]) => TaggedWithValue<X, Tagname>,
+  factory: TaggedFactory<Tagname>,
+  failfactory: <X>(...args: any[]) => Tagged<X, Tagname>,
 ) =>
   <T>(predicate: Predicate<T>) =>
-    (result: TaggedWithValue<T, Tagname>) =>
+    (result: Tagged<T, Tagname>) =>
       typeguard(result as Arg)
         ? predicate(result.value) ? factory(result.value) : failfactory()
         : failfactory();
@@ -30,17 +30,17 @@ export const createFilter = <
  * @template Arg
  * @template Tagname
  * @param {Predicate<Arg>} typeguard
- * @param {TaggedWithValueFactory<Tagname>} factory
+ * @param {TaggedFactory<Tagname>} factory
  */
 export const createFilterOr = <
-  Arg extends TaggedWithValue<any, Tagname>,
+  Arg extends Tagged<any, Tagname>,
   Tagname extends string,
 >(
   typeguard: Predicate<Arg>,
-  factory: TaggedWithValueFactory<Tagname>,
+  factory: TaggedFactory<Tagname>,
 ) =>
-  <T>(fallback: TaggedWithValue<T, Tagname>, predicate: Predicate<T>) =>
-    (result: TaggedWithValue<T, Tagname>) =>
+  <T>(fallback: Tagged<T, Tagname>, predicate: Predicate<T>) =>
+    (result: Tagged<T, Tagname>) =>
       typeguard(result as Arg)
         ? predicate(result.value) ? factory(result.value) : fallback
         : fallback;

@@ -1,18 +1,36 @@
-export declare interface TypesTable {
-  [index: string]: unknown;
-}
-
+/**
+ * Shorthand for undefined
+ */
 export type _ = undefined;
 
+/**
+ * Extracts the arguments types from a function
+ * 
+ * @example
+ * const foo = (a: string, b: number) => a.repeat(b);
+ * 
+ * type ArgsOfFoo = ArgsOf<typeof foo> // [string, number]
+ */
 export type ArgsOf<Fn extends FnBase> = Fn extends (...args: infer U) => any ? U
   : any[];
 
+/**
+ * A generic function type
+ */
 export type FnBase = (...args: any[]) => any;
 
-export type NullOrUndefined = null | undefined;
-
-export const typetables = {} as TypesTable;
-
+/**
+ * Binds a function to a null `this`, then returns it
+ * 
+ * @example
+ * const myfn = (text: string, repeat: number) => text.repeat(repeat);
+ * const bound = bind(myfn, 'abc', 3);
+ * 
+ * bound() // 'abcabcabc';
+ * 
+ * @param fn 
+ * @param args 
+ */
 export const bind = <Fn extends FnBase>(fn: Fn, ...args: ArgsOf<Fn>): Fn =>
   fn.bind(null, ...args) as Fn;
 
@@ -30,21 +48,6 @@ export const bind = <Fn extends FnBase>(fn: Fn, ...args: ArgsOf<Fn>): Fn =>
  */
 export const check = (condition: boolean, errormessage: string) =>
   <T>(arg: T): T | never => condition ? arg : panic(errormessage);
-
-/**
- * Adds a type to typetables const
- *
- * @template Key
- * @param {Key} key
- * @param {TypesTable[Key]} arg
- * @returns {void}
- */
-export const definetype = <Key extends keyof TypesTable>(
-  key: Key,
-  arg: TypesTable[Key],
-) => {
-  typetables[key] = arg;
-};
 
 /**
  * Throws an error with the given message

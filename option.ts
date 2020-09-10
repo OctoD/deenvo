@@ -1,15 +1,14 @@
 import {
   check,
-  definetype,
 } from "./applicative.ts";
 import { createExpect } from "./assertables.ts";
 import { createFilter, createFilterOr } from "./filterables.ts";
 import { createMap, createMapOr, createMapOrElse } from "./mappables.ts";
 import {
-  createTaggedWithValue,
+  createTagged,
   isTagged,
   isTaggedWith,
-  TaggedWithValue,
+  Tagged,
 } from "./tagged-type.ts";
 import * as typeguardsTs from "./typeguards.ts";
 import {
@@ -40,12 +39,12 @@ export type Optiontag = Nonetag | Sometag;
 /**
  * 
  */
-export interface None extends TaggedWithValue<any, Nonetag> {}
+export interface None extends Tagged<any, Nonetag> {}
 
 /**
  * 
  */
-export interface Some<T = unknown> extends TaggedWithValue<T, Sometag> {}
+export interface Some<T = unknown> extends Tagged<T, Sometag> {}
 
 /**
  * 
@@ -64,14 +63,6 @@ export type SomeFactory = <T>(value: T) => Some;
  * 
  */
 export type OptionFactory = <T>(value: T) => Option<T>;
-
-declare module "./applicative.ts" {
-  interface TypesTable {
-    readonly [NONETAG]: NoneFactory;
-    readonly [SOMETAG]: SomeFactory;
-    readonly [OPTIONTAG]: OptionFactory;
-  }
-}
 
 //#endregion
 
@@ -122,7 +113,7 @@ export const unexpect = createExpect<Option>(isNone);
 /**
  * 
  */
-export const none = (): None => createTaggedWithValue(void 0, NONETAG);
+export const none = (): None => createTagged(void 0, NONETAG);
 
 /**
  * 
@@ -131,17 +122,13 @@ export const some = <T>(value: T): Some<T> =>
   check(
     !typeguardsTs.isnullOrUndefined(value),
     "some value cannot be undefined nor null",
-  )(createTaggedWithValue(value, SOMETAG));
+  )(createTagged(value, SOMETAG));
 
 /**
  * 
  */
 export const option = <T>(value: T): Option<T> =>
   typeguardsTs.isnullOrUndefined(value) ? none() : some(value);
-
-definetype(NONETAG, none);
-definetype(SOMETAG, some);
-definetype(OPTIONTAG, option);
 
 //#endregion
 

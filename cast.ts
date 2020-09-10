@@ -1,6 +1,6 @@
 import {
-  TaggedWithValue,
-  TaggedWithValueFactory,
+  Tagged,
+  TaggedFactory,
 } from "./tagged-type.ts";
 
 /**
@@ -14,17 +14,17 @@ import {
  * @template Tagfrom
  * @template Tagto
  * @param {T} tagged
- * @param {TaggedWithValueFactory<Tagto>} totagged
- * @returns {TaggedWithValue<T['value'], Tagto>}
+ * @param {TaggedFactory<Tagto>} totagged
+ * @returns {Tagged<T['value'], Tagto>}
  */
 export const cast = <
-  T extends TaggedWithValue<any, Tagfrom>,
+  T extends Tagged<any, Tagfrom>,
   Tagfrom extends string,
   Tagto extends string,
 >(
   tagged: T,
-  totagged: TaggedWithValueFactory<Tagto>,
-): TaggedWithValue<T["value"], Tagto> => totagged(tagged.value);
+  totagged: TaggedFactory<Tagto>,
+): Tagged<T["value"], Tagto> => totagged(tagged.value);
 
 /**
  * Creates a cast to function
@@ -36,11 +36,11 @@ export const cast = <
  * toOption(just('hello')); // Some<'hello'>;
  *
  * @template Tagto
- * @param {TaggedWithValueFactory<Tagto>} totagged
+ * @param {TaggedFactory<Tagto>} totagged
  */
 export const createCast = <Tagto extends string>(
-  totagged: TaggedWithValueFactory<Tagto>,
+  totagged: TaggedFactory<Tagto>,
 ) =>
-  <T extends TaggedWithValue<any, Tagfrom>, Tagfrom extends string>(
+  <T extends Tagged<any, Tagfrom>, Tagfrom extends string>(
     arg: T,
-  ): TaggedWithValue<T["value"], Tagto> => totagged(arg.value);
+  ): Tagged<T["value"], Tagto> => totagged(arg.value);

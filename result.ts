@@ -1,16 +1,15 @@
 import {
   check,
-  definetype,
 } from "./applicative.ts";
 import { createExpect } from "./assertables.ts";
 import { createFilter, createFilterOr } from "./filterables.ts";
 import { createMap, createMapOr, createMapOrElse } from "./mappables.ts";
 import {
-  createTaggedWithValue,
+  createTagged,
   isTagged,
   isTaggedWith,
-  TaggedWithValue,
-  TaggedWithValueFactory,
+  Tagged,
+  TaggedFactory,
 } from "./tagged-type.ts";
 import * as tg from "./typeguards.ts";
 import {
@@ -43,12 +42,12 @@ export type ResultTag = Errtag | Oktag;
 /**
  * 
  */
-export interface Err extends TaggedWithValue<Error, Errtag> {}
+export interface Err extends Tagged<Error, Errtag> {}
 
 /**
  * 
  */
-export interface Ok<T = unknown> extends TaggedWithValue<T, Oktag> {}
+export interface Ok<T = unknown> extends Tagged<T, Oktag> {}
 
 /**
  * 
@@ -67,14 +66,6 @@ export type OkFactory = <T>(arg: T) => Ok<T>;
  * 
  */
 export type ResultFactory = <T>(arg: T) => Result<T>;
-
-declare module "./applicative.ts" {
-  interface TypesTable {
-    readonly [ERRTAG]: ErrFactory;
-    readonly [OKTAG]: OkFactory;
-    readonly [RESULTTAG]: ResultFactory;
-  }
-}
 
 //#endregion
 
@@ -107,7 +98,7 @@ export const isOk = tg.combine(isTagged, hasoktag) as tg.Typeguard<Ok>;
  * 
  */
 export const err = (message: string | Error): Err =>
-  createTaggedWithValue(
+  createTagged(
     message instanceof Error ? message : new Error(message),
     ERRTAG,
   );
@@ -116,7 +107,7 @@ export const err = (message: string | Error): Err =>
  * 
  */
 export const ok = <T>(value: T): Ok<T> =>
-  createTaggedWithValue(
+  createTagged(
     check(!tg.iserror(value), "An error cannot be a value of Ok")(value),
     OKTAG,
   );
@@ -126,10 +117,6 @@ export const ok = <T>(value: T): Ok<T> =>
  */
 export const result = <T>(value: T): Result<T> =>
   tg.iserror(value) ? err(value) : ok(value);
-
-definetype(RESULTTAG, result);
-definetype(ERRTAG, err);
-definetype(OKTAG, ok);
 
 //#endregion
 
@@ -153,7 +140,7 @@ export const unexpect = createExpect<Result>(isErr);
  */
 export const filter = createFilter<Result, ResultTag>(
   isOk,
-  result as TaggedWithValueFactory<ResultTag>,
+  result as TaggedFactory<ResultTag>,
   () => err("filter error") as any,
 );
 
@@ -162,7 +149,7 @@ export const filter = createFilter<Result, ResultTag>(
  */
 export const filterOr = createFilterOr<Result, ResultTag>(
   isOk,
-  result as TaggedWithValueFactory<ResultTag>,
+  result as TaggedFactory<ResultTag>,
 );
 
 //#endregion
@@ -174,7 +161,7 @@ export const filterOr = createFilterOr<Result, ResultTag>(
  */
 export const map = createMap<Result, ResultTag>(
   isOk,
-  result as TaggedWithValueFactory<ResultTag>,
+  result as TaggedFactory<ResultTag>,
 );
 
 /**
@@ -182,7 +169,7 @@ export const map = createMap<Result, ResultTag>(
  */
 export const mapOr = createMapOr<Result, ResultTag>(
   isOk,
-  result as TaggedWithValueFactory<ResultTag>,
+  result as TaggedFactory<ResultTag>,
 );
 
 /**
@@ -190,7 +177,7 @@ export const mapOr = createMapOr<Result, ResultTag>(
  */
 export const mapOrElse = createMapOrElse<Result, ResultTag>(
   isOk,
-  result as TaggedWithValueFactory<ResultTag>,
+  result as TaggedFactory<ResultTag>,
 );
 
 //#endregion

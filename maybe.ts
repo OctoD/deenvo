@@ -1,13 +1,13 @@
-import { check, definetype } from "./applicative.ts";
+import { check } from "./applicative.ts";
 import { createExpect } from "./assertables.ts";
 import { createFilter, createFilterOr } from "./filterables.ts";
 import { createfold } from "./foldables.ts";
 import { Predicate } from "./predicate.ts";
 import {
-  createTaggedWithValue,
+  createTagged,
   isTagged,
   isTaggedWith,
-  TaggedWithValue,
+  Tagged,
 } from "./tagged-type.ts";
 import { combine, anyof, Typeguard } from "./typeguards.ts";
 import {
@@ -37,11 +37,11 @@ export type MaybeTag = JustTag | NothingTag;
 /**
  * 
  */
-export interface Nothing extends TaggedWithValue<unknown, NothingTag> {}
+export interface Nothing extends Tagged<unknown, NothingTag> {}
 /**
  * 
  */
-export interface Just<T = unknown> extends TaggedWithValue<T, JustTag> {}
+export interface Just<T = unknown> extends Tagged<T, JustTag> {}
 
 /**
  * 
@@ -56,13 +56,6 @@ export type NothingFactory = () => Nothing;
  * 
  */
 export type JustFactory = <T>(value: T) => Just<T>;
-
-declare module "./applicative.ts" {
-  interface TypesTable {
-    readonly [JUSTTAG]: JustFactory;
-    readonly [NOTHINGTAG]: NothingFactory;
-  }
-}
 
 //#endregion
 
@@ -94,19 +87,15 @@ export const isNothing = combine<Nothing>(isTagged, hasnothingtag);
 /**
  * 
  */
-export const nothing = (): Nothing =>
-  createTaggedWithValue(undefined, NOTHINGTAG);
+export const nothing = (): Nothing => createTagged(undefined, NOTHINGTAG);
 
 /**
  * 
  */
 export const just = <T>(value: T) =>
   check(!!value, "Just value must be truthy")(
-    createTaggedWithValue(value, JUSTTAG),
+    createTagged(value, JUSTTAG),
   );
-
-definetype(NOTHINGTAG, nothing);
-definetype(JUSTTAG, just);
 
 /**
  * 

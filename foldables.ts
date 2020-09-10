@@ -1,20 +1,20 @@
 import { Predicate } from "./predicate.ts";
-import { TaggedWithValue, TaggedWithValueFactory } from "./tagged-type.ts";
+import { Tagged, TaggedFactory } from "./tagged-type.ts";
 
 export type FoldableFn<T, R, Tagname extends string> = (
   arg: T,
-) => TaggedWithValue<R, Tagname>;
+) => Tagged<R, Tagname>;
 
 /**
  * Creates a fold function
  * @template Tagname
- * @param {Predicate<TaggedWithValue<any, Tagname>>} lefthandpredicate
+ * @param {Predicate<Tagged<any, Tagname>>} lefthandpredicate
  */
 export const createfold = <Tagname extends string>(
-  lefthandpredicate: Predicate<TaggedWithValue<any, Tagname>>,
+  lefthandpredicate: Predicate<Tagged<any, Tagname>>,
 ) =>
   <T, U, R>(left: (arg: T) => R, right: (arg: U) => R) =>
-    <E extends TaggedWithValue<T | U, Tagname>>(arg: E) =>
+    <E extends Tagged<T | U, Tagname>>(arg: E) =>
       lefthandpredicate(arg) ? left(arg.value as T) : right(arg.value as U);
 
 /**
@@ -22,19 +22,19 @@ export const createfold = <Tagname extends string>(
  *
  * @template LeftTag
  * @template RightTag
- * @param {(Predicate<TaggedWithValue<unknown, LeftTag | RightTag>>)} lefthandpredicate
- * @param {TaggedWithValueFactory<LeftTag>} leftcreator
- * @param {TaggedWithValueFactory<RightTag>} rightcreator
+ * @param {(Predicate<Tagged<unknown, LeftTag | RightTag>>)} lefthandpredicate
+ * @param {TaggedFactory<LeftTag>} leftcreator
+ * @param {TaggedFactory<RightTag>} rightcreator
  */
 export const createSwap = <LeftTag extends string, RightTag extends string>(
-  lefthandpredicate: Predicate<TaggedWithValue<unknown, LeftTag | RightTag>>,
-  leftcreator: TaggedWithValueFactory<LeftTag>,
-  rightcreator: TaggedWithValueFactory<RightTag>,
+  lefthandpredicate: Predicate<Tagged<unknown, LeftTag | RightTag>>,
+  leftcreator: TaggedFactory<LeftTag>,
+  rightcreator: TaggedFactory<RightTag>,
 ) =>
-  <T extends TaggedWithValue<any, LeftTag | RightTag>>(
+  <T extends Tagged<any, LeftTag | RightTag>>(
     arg: T,
-  ): T["__tag"] extends LeftTag ? TaggedWithValue<T["value"], RightTag>
-    : TaggedWithValue<T["value"], LeftTag> =>
+  ): T["__tag"] extends LeftTag ? Tagged<T["value"], RightTag>
+    : Tagged<T["value"], LeftTag> =>
     lefthandpredicate(arg)
       ? rightcreator(arg.value)
       : leftcreator(arg.value) as any;
