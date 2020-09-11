@@ -2,12 +2,19 @@ import {
   assert,
   assertEquals,
 } from "https://deno.land/std/testing/asserts.ts";
-import { fifn } from "../conditionals.ts";
+import {
+  exists,
+} from "https://deno.land/std/fs/mod.ts";
+import {
+  join
+} from "https://deno.land/std/path/mod.ts";
+
 import {
   bind,
   combine,
   createStructOf,
   fi,
+  fifn,
   isarrayof,
   isnumber,
   isstring,
@@ -15,12 +22,12 @@ import {
   anyof,
   predicate,
   result,
-} from "../mod.ts";
-import { Option } from "../option.ts";
-import {
+  check,
+  trycatchAsync,
   taggedFactory,
   Tagged,
-} from "../tagged-type.ts";
+  pipe,
+} from "../mod.ts";
 
 Deno.test("example 001 : getting first and last user in mixed array", () => {
   // given this example, you have to
@@ -92,7 +99,7 @@ Deno.test("example 002 : validating a matrix", () => {
 });
 
 Deno.test("example 003 : creating a doubly linked list", () => {
-  type MaybeListItem<T> = Option<ListItem<T>>;
+  type MaybeListItem<T> = option.Option<ListItem<T>>;
 
   interface ListItem<T> {
     value: T;
@@ -195,4 +202,24 @@ Deno.test("example 004 : creates a state manager", () => {
   assertEquals(mystate.value.bar, "baz");
   assertEquals(mystate.value.hello, "world");
   assertEquals(mystate.value.foo, 123);
+});
+
+Deno.test('example 005 : try to read a file content if exists', async () => {
+  const testfilepath = (filename: string) => join(Deno.cwd(), 'tests', filename);
+  const readfile = pipe(
+    async (filepath: string) => check(await exists(filepath), 'file does not exists')(filepath),
+    async (filepath: Promise<string>) => Deno.readFile(await filepath),
+    async (filedata: Promise<Uint8Array>) => new TextDecoder('utf-8').decode(await filedata),
+  );
+  
+  const filepathok = testfilepath('maybe.test.ts');
+  const filepathno = testfilepath('12345.test.ts');
+
+  const resultok = await trycatchAsync(readfile, filepathok);
+  const resultko = await trycatchAsync(readfile, filepathno);
+
+  assert(result.isOk(resultok), 'existing file should be Ok');
+  assert(result.isErr(resultko), 'non existing file should be Err');
+
+  assert(isstring(result.unwrap(resultok)));
 });
