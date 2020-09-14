@@ -282,10 +282,7 @@ export const haslengthof = (length: number) =>
 //#region typeguards factories
 
 export type TypeguardsFromStruct<T> = {
-  [key in keyof T]: T[key] extends
-    (number | string | boolean | null | undefined | unknown[])
-    ? Typeguard<T[key]>
-    : TypeguardsFromStruct<T[key]>;
+  [key in keyof T]: Typeguard<T[key]> | TypeguardsFromStruct<T[key]>;
 };
 
 /**
