@@ -31,8 +31,8 @@ export type FnBase = (...args: any[]) => any;
  * @param fn 
  * @param args 
  */
-export const bind = <Fn extends FnBase>(fn: Fn, ...args: ArgsOf<Fn>): Fn =>
-  fn.bind(null, ...args) as Fn;
+export const bind = <Fn extends FnBase>(fn: Fn, ...args: ArgsOf<Fn>): () => ReturnType<Fn> =>
+  () => fn(...args) as ReturnType<Fn>;
 
 /**
  * Checks if a given condition is true, otherwise throws an error with the given error message
