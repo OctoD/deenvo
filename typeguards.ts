@@ -396,7 +396,7 @@ export const anyof = <T>(
  * isnullOrUndefined('foo')     // false
  * isnullOrUndefined([])        // false
  */
-export const isnullOrUndefined = combine<null | undefined>(isnull, isundefined);
+export const isnullOrUndefined = anyof<null | undefined>(isnull, isundefined);
 
 /**
  * Checks if a variable is not null or undefined
