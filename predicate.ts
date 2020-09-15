@@ -61,7 +61,7 @@ export const fromvalue = <T>(value: T) =>
  * @template T
  * @param {...T} values
  */
-export const fromvalues = <T extends any[]>(...values: T) =>
+export const fromvalues = <T>(...values: T[]) =>
   (predicate: Predicate<T>) => values.every(predicate);
 
 /**
