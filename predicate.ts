@@ -74,7 +74,7 @@ export const fromvalues = <T>(...values: T[]) =>
  * const isnull = (arg: unknown): arg is null => typeof arg === 'null';
  * const isundefined = (arg: unknown): arg is undefined => typeof arg === 'null';
  * 
- * const noneOfTheAbove = none(isnumber, isstring, isnull, isundefined);
+ * const noneOfTheAbove = noneof(isnumber, isstring, isnull, isundefined);
  * 
  * noneOfTheAbove(10)             // false
  * noneOfTheAbove('hello world')  // false
@@ -85,7 +85,7 @@ export const fromvalues = <T>(...values: T[]) =>
  * @param {...Predicate<T>[]} predicates
  * @returns {Predicate<T>}
  */
-export const none = <T>(...predicates: Predicate<T>[]): Predicate<T> =>
+export const noneof = <T>(...predicates: Predicate<T>[]): Predicate<T> =>
   (argument) => predicates.every(reverse(fromvalue(argument)));
 
 /**

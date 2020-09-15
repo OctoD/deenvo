@@ -39,7 +39,7 @@ Deno.test("predicate::" + p.reverse.name, () => {
   assert(p.reverse(p2)(""));
 });
 
-Deno.test("predicate::" + p.none.name, () => {
-  assert(p.none(p1, p2, p3)("qwerty" as any));
-  assert(!p.none(p1, p2, p4)(10));
+Deno.test("predicate::" + p.noneof.name, () => {
+  assert(p.noneof(p1, p2, p3)("qwerty" as any));
+  assert(!p.noneof(p1, p2, p4)(10));
 });
