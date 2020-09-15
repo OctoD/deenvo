@@ -1,4 +1,4 @@
-import {
+import type {
   Tagged,
   TaggedFactory,
 } from "./tagged-type.ts";

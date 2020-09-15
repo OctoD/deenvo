@@ -1,5 +1,5 @@
-import { Predicate } from "./predicate.ts";
-import { Tagged, TaggedFactory } from "./tagged-type.ts";
+import type { Predicate } from "./predicate.ts";
+import type { Tagged, TaggedFactory } from "./tagged-type.ts";
 
 export type FoldableFn<T, R, Tagname extends string> = (
   arg: T,

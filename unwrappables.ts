@@ -1,6 +1,6 @@
 import { check } from "./applicative.ts";
-import { Predicate } from "./predicate.ts";
-import { Tagged } from "./tagged-type.ts";
+import type { Predicate } from "./predicate.ts";
+import type { Tagged } from "./tagged-type.ts";
 
 /**
  *

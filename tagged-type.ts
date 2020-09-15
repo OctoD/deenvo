@@ -5,8 +5,8 @@ import {
   haskeyWithValue,
   isindexable,
   isstring,
-  Typeguard,
 } from "./typeguards.ts";
+import type { Typeguard } from "./typeguards.ts";
 
 /**
  * A `TaggedType` with a value `T`

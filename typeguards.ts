@@ -1,4 +1,4 @@
-import { FnBase } from "./applicative.ts";
+import type { FnBase } from "./applicative.ts";
 import * as predicate from "./predicate.ts";
 
 //#region types

@@ -1,7 +1,7 @@
 import {
   assert,
 } from "https://deno.land/std/testing/asserts.ts";
-import { ArgsOf, FnBase } from "../applicative.ts";
+import type { ArgsOf, FnBase } from "../applicative.ts";
 import { isErr, isOk } from "../result.ts";
 import { trycatch, trycatchAsync } from "../trycatch.ts";
 

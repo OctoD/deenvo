@@ -2,7 +2,7 @@ import { check } from "./applicative.ts";
 import { createExpect } from "./assertables.ts";
 import { createFilter, createFilterOr } from "./filterables.ts";
 import { createfold } from "./foldables.ts";
-import { Predicate } from "./predicate.ts";
+import type { Predicate } from "./predicate.ts";
 import {
   tagged,
   isTagged,

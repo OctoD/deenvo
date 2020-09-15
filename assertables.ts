@@ -1,5 +1,5 @@
 import { check } from "./applicative.ts";
-import { Predicate } from "./predicate.ts";
+import type { Predicate } from "./predicate.ts";
 
 export type Expect<T> = ((errormessage: string) => (arg: T) => T);
 

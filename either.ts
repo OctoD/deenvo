@@ -1,7 +1,7 @@
 import { createFilter, createFilterOr } from "./filterables.ts";
 import { createfold, createSwap } from "./foldables.ts";
 import { createMap, createMapOr, createMapOrElse } from "./mappables.ts";
-import { Predicate } from "./predicate.ts";
+import type { Predicate } from "./predicate.ts";
 import {
   tagged,
   isTagged,
