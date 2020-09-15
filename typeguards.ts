@@ -327,11 +327,6 @@ export const createStructOf = <TG extends any>(
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       const currentvalue = value[key];
-
-      if (!(key in value)) {
-        return false;
-      }
-
       const currenttg = typeguard[key as keyof typeof typeguard];
       const case1 = isindexable(currenttg) &&
         createStructOf(currenttg as any)(currentvalue);
