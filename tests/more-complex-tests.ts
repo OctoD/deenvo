@@ -6,7 +6,7 @@ import {
   exists,
 } from "https://deno.land/std/fs/mod.ts";
 import {
-  join
+  join,
 } from "https://deno.land/std/path/mod.ts";
 
 import {
@@ -204,22 +204,25 @@ Deno.test("example 004 : creates a state manager", () => {
   assertEquals(mystate.value.foo, 123);
 });
 
-Deno.test('example 005 : try to read a file content if exists', async () => {
-  const testfilepath = (filename: string) => join(Deno.cwd(), 'tests', filename);
+Deno.test("example 005 : try to read a file content if exists", async () => {
+  const testfilepath = (filename: string) =>
+    join(Deno.cwd(), "tests", filename);
   const readfile = pipe(
-    async (filepath: string) => check(await exists(filepath), 'file does not exists')(filepath),
+    async (filepath: string) =>
+      check(await exists(filepath), "file does not exists")(filepath),
     async (filepath: Promise<string>) => Deno.readFile(await filepath),
-    async (filedata: Promise<Uint8Array>) => new TextDecoder('utf-8').decode(await filedata),
+    async (filedata: Promise<Uint8Array>) =>
+      new TextDecoder("utf-8").decode(await filedata),
   );
-  
-  const filepathok = testfilepath('maybe.test.ts');
-  const filepathno = testfilepath('12345.test.ts');
+
+  const filepathok = testfilepath("maybe.test.ts");
+  const filepathno = testfilepath("12345.test.ts");
 
   const resultok = await trycatchAsync(readfile, filepathok);
   const resultko = await trycatchAsync(readfile, filepathno);
 
-  assert(result.isOk(resultok), 'existing file should be Ok');
-  assert(result.isErr(resultko), 'non existing file should be Err');
+  assert(result.isOk(resultok), "existing file should be Ok");
+  assert(result.isErr(resultko), "non existing file should be Err");
 
   assert(isstring(result.unwrap(resultok)));
 });

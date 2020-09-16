@@ -31,8 +31,10 @@ export type FnBase = (...args: any[]) => any;
  * @param fn 
  * @param args 
  */
-export const bind = <Fn extends FnBase>(fn: Fn, ...args: ArgsOf<Fn>): () => ReturnType<Fn> =>
-  () => fn(...args) as ReturnType<Fn>;
+export const bind = <Fn extends FnBase>(
+  fn: Fn,
+  ...args: ArgsOf<Fn>
+): () => ReturnType<Fn> => () => fn(...args) as ReturnType<Fn>;
 
 /**
  * Checks if a given condition is true, otherwise throws an error with the given error message
@@ -82,8 +84,8 @@ export const panic = <E extends ErrorConstructor>(
  * @returns {(... args: ArgsOf<Fn>) => Promise<ReturnType<Fn>>}
  */
 export const toasync = <Fn extends FnBase>(
-  fn: Fn
-): ((...args: ArgsOf<Fn>) => Promise<ReturnType<Fn>>) => async (
-  ...args: ArgsOf<Fn>
-) => fn(...args);
-
+  fn: Fn,
+): ((...args: ArgsOf<Fn>) => Promise<ReturnType<Fn>>) =>
+  async (
+    ...args: ArgsOf<Fn>
+  ) => fn(...args);
