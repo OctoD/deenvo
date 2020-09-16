@@ -6,7 +6,7 @@
     {
       "label": "test",
       "type": "shell",
-      "command": "deno test --unstable --allow-read mod.test.ts"
+      "command": "deno test --unstable --coverage --allow-read mod.test.ts"
     }
   ]
 }
