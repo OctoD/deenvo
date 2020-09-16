@@ -3,7 +3,16 @@ import {
   assertEquals,
   assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
-import { isNone, isOptionOf, isSome, none, some, filter, filterOr, unwrap } from "../option.ts";
+import {
+  isNone,
+  isOptionOf,
+  isSome,
+  none,
+  some,
+  filter,
+  filterOr,
+  unwrap,
+} from "../option.ts";
 import { isnumber, isstring } from "../typeguards.ts";
 
 Deno.test("option::typeguards", () => {
@@ -20,13 +29,13 @@ Deno.test("option::typeguards", () => {
 
 const fnfilter = (arg: number) => arg > 0;
 
-Deno.test('option::' + filter.name, () => {
-  assert(isSome(filter(fnfilter)(some(10))))
-  assert(isNone(filter(fnfilter)(some(-1))))
+Deno.test("option::" + filter.name, () => {
+  assert(isSome(filter(fnfilter)(some(10))));
+  assert(isNone(filter(fnfilter)(some(-1))));
 });
 
-Deno.test('option::' + filterOr.name, () => {
+Deno.test("option::" + filterOr.name, () => {
   const fallback = some(0);
-  assertEquals(unwrap(filterOr(fallback, fnfilter)(some(10))), 10)
-  assertEquals(unwrap(filterOr(fallback, fnfilter)(some(-1))), 0)
+  assertEquals(unwrap(filterOr(fallback, fnfilter)(some(10))), 10);
+  assertEquals(unwrap(filterOr(fallback, fnfilter)(some(-1))), 0);
 });
